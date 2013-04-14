@@ -1,0 +1,74 @@
+<!-- <html>
+  <body>
+    {% for greeting in greetings %}
+      {% if greeting.author %}
+        <b>{{ greeting.author }}</b> wrote:
+      {% else %}
+        An anonymous person wrote:
+      {% endif %}
+      <blockquote>{{ greeting.content|escape }}</blockquote>
+    {% endfor %}
+
+    <form action="/sign" method="post">
+      <div><textarea name="content" rows="3" cols="60"></textarea></div>
+      <div><input type="submit" value="Sign Guestbook"></div>
+    </form>
+
+    <a href="{{ url }}">{{ url_linktext }}</a>
+
+  </body>
+</html> -->
+
+<html>
+<head>
+  <title>Lasertag rating portal</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
+</head>
+<body>
+  <div id="Gamers">
+    List of gamers:<br>
+    <ul>
+      {% for gamer in gamers %}
+      <li><a href="#">{{ gamer.name }} ({{ gamer.nick }})</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="Commands">
+    List of command:
+    <ul>
+      {% for command in commands %}
+      <li><a href="#">{{ command.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="Statistics">
+    All time statistics:
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Color</th>
+        <th>Name</th>
+        <th>Rating</th>
+        <th>Accuracy</th>
+        <th>Damage</th>
+        <th>Count of death</th>
+        <th>Count of Injuries</th>
+        <th>Used cartridge</th>
+      </tr>
+      {% for stat in statistics %}
+      <tr>
+        <td>{{ stat.date }}</td>
+        <td>{{ stat.color }}</td>
+        <td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
+        <td>{{ stat.rating }}</td>
+        <td>{{ stat.accuracy }}</td>
+        <td>{{ stat.damage }}</td>
+        <td>{{ stat.countOfDeat }}</td>
+        <td>{{ stat.coundOfInjuries }}</td>
+        <td>{{ stat.usedCartridge }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+</html>
