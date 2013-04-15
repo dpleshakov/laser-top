@@ -9,37 +9,68 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 ###################################################
 class Command(db.Model):
-	name = db.StringProperty()
+	name = db.StringProperty(required = True)
+	# gamers
 
 class Gamer(db.Model):
-	name = db.StringProperty()
+	name = db.StringProperty(required = True)
 	nick = db.StringProperty()
-	command = db.ReferenceProperty(Command)
+	command = db.ReferenceProperty(Command, collection_name = 'gamers')
+
+	@property
+	def keyStr(self):
+		return str(self.key())
+
+	# stats
+	# achievements
+
+class Game(db.Model):
+	date = db.DateProperty(required = True)
+	# stats
+	# achievements
 
 class Statistic(db.Model):
-	date = db.DateProperty()
-	color = db.StringProperty()
-	countOfDeaths = db.IntegerProperty()
-	countOfInjuries = db.IntegerProperty()
-	usedCartridge = db.IntegerProperty()
-	damage = db.IntegerProperty()
-	rating = db.FloatProperty()
-	accuracy = db.FloatProperty()
-	gamer = db.ReferenceProperty(Gamer)
+	game = db.ReferenceProperty(Game, collection_name = 'stats', required = True)
+	color = db.StringProperty(required = True)
+	gamer = db.ReferenceProperty(Gamer, collection_name = 'stats', required = True)
+	rating = db.FloatProperty(required = True)
+	accuracy = db.FloatProperty(required = True)
+	damage = db.IntegerProperty(required = True)
+	countOfDeaths = db.IntegerProperty(required = True)
+	countOfInjuries = db.IntegerProperty(required = True)
+	usedCartridge = db.IntegerProperty(required = True)
+
+class AchievementType(db.Model):
+	name = db.StringProperty(required = True)
+	level = db.StringProperty(required = True)
+	image = db.LinkProperty(default = None)
+	# achievements
+	
+class Achievement(db.Model):
+	achievementType = db.ReferenceProperty(AchievementType, collection_name = 'achievements', required = True)
+	game = db.ReferenceProperty(Game, collection_name = 'achievements', required = True)
+	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
 
 ###################################################
-def GetGamer(nameOrNick):
-	gamer = db.GqlQuery("SELECT * FROM Gamer WHERE name = '" + nameOrNick + "'")
-	if gamer.count() > 0:
-		return gamer[0]
-	gamer = db.GqlQuery("SELECT * FROM Gamer WHERE nick = '" + nameOrNick + "'")
+def GetGamer(name, nick):
+	gamer = Gamer.gql("WHERE name = :1", name)
 	if gamer.count() > 0:
 		return gamer[0]
 
-	gamer = Gamer(name = nameOrNick)
+	gamer = Gamer(name = name, nick = nick)
 	gamer.put()
 
 	return gamer
+
+def GetGame(date):
+	game = Game.gql("WHERE date = :1", date)
+	if game.count() > 0:
+		return game[0]
+
+	game = Game(date = date)
+	game.put()
+
+	return game
 
 def StrToDate(dateAsStr):
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
@@ -50,9 +81,9 @@ def ParseLine(line):
 	splitedLine = line.split(char)
 
 	stat = Statistic(
-			date = StrToDate(splitedLine[0]),
+			game = GetGame(StrToDate(splitedLine[0])),
 			color = splitedLine[1],
-			gamer = GetGamer(splitedLine[2]),
+			gamer = GetGamer(splitedLine[2], splitedLine[3]),
 			rating = float(splitedLine[4]),
 			accuracy = float(splitedLine[5]),
 			damage = int(splitedLine[6]),
@@ -69,21 +100,28 @@ def Parse(text):
 		ParseLine(line)
 
 class MainPage(webapp2.RequestHandler):
+	def get(self):
+		orderBy = self.request.get('orderBy')
+		if not orderBy:
+			orderBy = 'rating'
+		isDescending = self.request.get('isDescending') != "False"
+		# if isDescending is null:
+		# 	isDescending = False
 
-	isDescending = False
-	
-	def get(self, orderBy = "rating"):
+		descendingQuery = ''
+		if isDescending:
+			descendingQuery = " DESC"
+
 		gamers = db.GqlQuery("SELECT * FROM Gamer")
 		commands = db.GqlQuery("SELECT * FROM Command")
-		descendingQuery = ''
-		if self.isDescending:
-			descendingQuery = " DESC"
 		statistics = db.GqlQuery("SELECT * FROM Statistic ORDER BY " + orderBy + descendingQuery)
 
 		template_values = {
 			'gamers': gamers,
 			'commands': commands,
 			'statistics': statistics,
+			'orderBy': orderBy,
+			'isDescending': not isDescending,
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -116,7 +154,23 @@ class AddPage(webapp2.RequestHandler):
 		Parse(self.request.get('stats'))
 		self.redirect('/')
 
+class UserPage(webapp2.RequestHandler):
+
+	def get(self):
+		gamerKeyStr = self.request.get('key')
+		gamer = db.get(db.Key(encoded = gamerKeyStr))
+
+		template_values = {
+			'gamer': gamer
+		}
+
+		template = JINJA_ENVIRONMENT.get_template('userPage.html')
+		self.response.write(template.render(template_values))
+		
+
 app = webapp2.WSGIApplication(
 	[('/', MainPage),
-	('/add', AddPage)],
+	('/add', AddPage),
+	('/user', UserPage),
+	],
 	debug = True)
