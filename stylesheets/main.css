@@ -1,3 +1,123 @@
-table, tr, td, th {
-	border: 1px solid black;
+/****************************************************/
+#header {
+	padding-top: 9px;
+	padding-bottom: 7px;
+	border-bottom: 2px solid black;
+	background-color: #339933;
+	font-weight: bold;
+	font-size: 3ex;
+	text-align: center;
+	color: white;
 }
+
+#header a {
+	color: white;
+}
+
+#header a:hover {
+	text-decoration: none;
+}
+
+/****************************************************/
+#main {
+	min-height: 91%;
+}
+
+/****************************************************/
+footer {
+	background-color: #339933;
+	border-top: 2px solid black;
+	margin-top: 10px;
+	padding-top: 7px;
+	padding-bottom: 9px;
+	position: absolute;
+	width: 99%;
+	font-size: 1.8ex;
+	text-align: center;
+	color: white;
+}
+
+footer a {
+	color: white;
+}
+
+footer a:hover {
+	text-decoration: none;
+}
+
+/****************************************************/
+table{
+	border-collapse: collapse;
+}
+
+/****************************************************/
+#info table, #info th, #info td {
+	padding: 5px 5px 5px 5px;
+}
+
+/****************************************************/
+#stats {
+	margin-top: 20px;
+}
+
+#stats table, #stats th, #stats td {
+	border: 1px solid black;
+	padding: 5px 5px 5px 5px;
+}
+
+#stats th {
+	background-color: #D0D0D0;
+}
+
+#stats a {
+	color: black;
+}
+
+#stats a:hover {
+	text-decoration: none;
+}
+
+/****************************************************/
+#addForm textarea {
+	width: 100%;
+	height: 500px;
+}
+
+/****************************************************/
+#lists table {
+	width: 100%;
+}
+
+#lists td {
+	width: 50%;
+}
+
+/*#gamers {
+	overflow: hidden;
+    height: 100px;
+}
+
+#commands {
+	float: right;
+    width: 100px;
+    height: 100px;
+}*/
+
+/****************************************************/
+.elements-center {
+	margin-left:auto !important;
+	margin-right:auto !important;
+}
+
+.text-center {
+	text-align: center !important;
+}
+
+.text-right {
+	text-align: right !important;
+}
+
+h1, h2, h3, h4, h5, h6, h6 {
+	text-align: center;
+}
+/****************************************************/
