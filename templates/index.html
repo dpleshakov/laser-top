@@ -1,0 +1,80 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laser-TOP</title>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
+</head>
+<body>
+	<div id="header">Портал статистики <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></div>
+	<div id="main">
+		<div id="lists">
+			<table>
+				<tr>
+					<td>
+						<div id="gamers">
+							Игроки:<br>
+							<ul>
+								{% for gamer in gamers %}
+								<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer.name }} ({{ gamer.nick }})</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+					</td>
+					<td>
+						<div id="commands">
+						Команды:
+						<ul>
+							{% for command in commands %}
+							<li><a href="#">{{ command.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+					</td>
+					<td>
+						<div id="games">
+						Игры:
+						<ul>
+							{% for game in games %}
+							<li><a href="/game?key={{ game.keyStr }}">{{ game.date }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="stats">
+			<table class="elements-center">
+				<tr>
+					<th colspan="9">Игровая статистика за все время</th>
+				</tr>
+				<tr>
+					<th>Дата</th>
+					<th><a href="/?orderBy=color&isDescending={{ isDescending }}">Цвет</a></th>
+					<th>Имя игрока</th>
+					<th><a href="/?orderBy=rating&isDescending={{ isDescending }}">Рейтинг</a></th>
+					<th><a href="/?orderBy=accuracy&isDescending={{ isDescending }}">Точность</a></th>
+					<th><a href="/?orderBy=damage&isDescending={{ isDescending }}">Урон</a></th>
+					<th><a href="/?orderBy=countOfDeaths&isDescending={{ isDescending }}">Количество смертей</a></th>
+					<th><a href="/?orderBy=countOfInjuries&isDescending={{ isDescending }}">Количество ранений</a></th>
+					<th><a href="/?orderBy=usedCartridge&isDescending={{ isDescending }}">Испольовано патронов</a></th>
+				</tr>
+				{% for stat in statistics %}
+				<tr>
+					<td>{{ stat.game.date }}</td>
+					<td>{{ stat.color }}</td>
+					<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
+					<td>{{ stat.rating }}</td>
+					<td>{{ stat.accuracy }}</td>
+					<td>{{ stat.damage }}</td>
+					<td>{{ stat.countOfDeaths }}</td>
+					<td>{{ stat.countOfInjuries }}</td>
+					<td>{{ stat.usedCartridge }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+	<footer>&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a></footer>
+</body>
+</html>
