@@ -23,6 +23,13 @@
 			</table>
 		</div>
 		<div id="achives">
+			Достижения:<br>
+			<ul>
+				{% for achievement in game.achievements %}
+				<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена {{ achievement.gamer.name }}</li>
+				{% endfor %}
+			</ul>
+		</div>
 		</div>
 		<div id="stats">
 			<table class="elements-center">
