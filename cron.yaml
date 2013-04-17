@@ -1,0 +1,4 @@
+cron:
+- description: Daily achievements recalculation.
+  url: /achievements
+  schedule: every 12 hours

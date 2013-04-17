@@ -96,7 +96,7 @@ def RecalculateGameOneAchievement(game, statisticName, achievementName):
 def RecalculateGameAchievements(game):
 	
 
-def RecalculateAchievement():
+def RecalculateAchievements():
 	allGames = Games.all()
 	for currentGame in allGames:
 		RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
@@ -128,3 +128,7 @@ def GenerateAchievementsTypes():
 	# AchievementType(name = "Collector", level = "Gold").put()
 	# AchievementType(name = "Collector", level = "Silver").put()
 	# AchievementType(name = "Collector", level = "Bronze").put()
+
+if not db.AchievementType.all().count() > 0:
+	GenerateAchievementsTypes()
+RecalculateAchievements()
