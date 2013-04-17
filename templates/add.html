@@ -1,0 +1,29 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laser-TOP</title>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
+	<script type="text/javascript">
+		isChanged = false
+
+		function ClearTextarea() {
+			if (!isChanged) {
+				document.getElementById("statsTextArea").value = "";
+				isChanged = true;
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="header">Портал статистики <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></div>
+	<div id="main">
+		<div id="addForm">
+			<form acrion="/add" method="post">
+				<textarea name='stats' id="statsTextArea" onclick="ClearTextarea();">Поле для ввода статистики...</textarea>
+				<input type="submit" value="Add" />
+			</form>
+		</div>
+	</div>
+	<footer>&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a></footer>
+</body>
+</html>
