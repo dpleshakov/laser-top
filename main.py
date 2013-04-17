@@ -191,13 +191,17 @@ class CommandPage(webapp2.RequestHandler):
 	def get(self):
 		commandKeyStr = self.request.get('key')
 		command = db.get(db.Key(encoded = gameKeyStr))
+		
 		stats = []
+		achievements = []
 		for gamer in command.gamers:
 			stats.extend(gamer.stats)
+			achievements.extend(gamer.achievements)
 
 		template_values = {
 			'command': command,
 			'stats': stats,
+			'achievements': achievements,
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('command.html')
