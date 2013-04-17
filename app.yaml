@@ -1,10 +1,18 @@
-application: lasertag
+application: laser-TOP
 version: 1
 runtime: python27
 api_version: 1
 threadsafe: true
 
 handlers:
+- url: /add
+  script: main.app
+  login: admin
+
+- url: /achievements
+  script: achievements.app
+  login: admin
+
 - url: /stylesheets
   static_dir: stylesheets
 
