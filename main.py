@@ -12,22 +12,41 @@ class Command(db.Model):
 	name = db.StringProperty(required = True)
 	# gamers
 
+	@property
+	def keyStr(self):
+		return str(self.key())
+
+	@property
+	def gamersCount(self):
+		return self.gamers.count()
+
 class Gamer(db.Model):
 	name = db.StringProperty(required = True)
 	nick = db.StringProperty()
 	command = db.ReferenceProperty(Command, collection_name = 'gamers')
+	# stats
+	# achievements
 
 	@property
 	def keyStr(self):
 		return str(self.key())
 
-	# stats
-	# achievements
+	@property
+	def gamesCount(self):
+		return self.stats.count()
 
 class Game(db.Model):
 	date = db.DateProperty(required = True)
 	# stats
 	# achievements
+
+	@property
+	def keyStr(self):
+		return str(self.key())
+
+	@property:
+	def gamersCount(self):
+		return self.stats.count()
 
 class Statistic(db.Model):
 	game = db.ReferenceProperty(Game, collection_name = 'stats', required = True)
@@ -95,10 +114,14 @@ def ParseLine(line):
 
 def Parse(text):
 	char = '\n'
+	text.replace(' ', '')
+	text.replace('%', '')
+	text.replace(',', '.')
 	splitedText = text.split(char)
 	for line in splitedText:
 		ParseLine(line)
 
+###################################################
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		orderBy = self.request.get('orderBy')
@@ -133,28 +156,11 @@ class AddPage(webapp2.RequestHandler):
 		template = JINJA_ENVIRONMENT.get_template('add.html')
 		self.response.write(template.render())
 
-	# def post(self):
-	# 	gamer = GetGamer(self.request.get('name'))
-
-	# 	stat = Statistic(
-	# 		date = StrToDate(self.request.get('date')),
-	# 		color = self.request.get('color'),
-	# 		countOfDeaths = int(self.request.get('countOfDeaths')),
-	# 		countOfInjuries = int(self.request.get('countOfInjuries')),
-	# 		usedCartridge = int(self.request.get('usedCartridge')),
-	# 		damage = int(self.request.get('damage')),
-	# 		rating = int(self.request.get('rating')),
-	# 		accuracy = int(self.request.get('accuracy')),
-	# 		gamer = gamer
-	# 		)
-	# 	stat.put()
-
-	# 	self.redirect('/')
 	def post(self):
 		Parse(self.request.get('stats'))
 		self.redirect('/')
 
-class UserPage(webapp2.RequestHandler):
+class GamerPage(webapp2.RequestHandler):
 
 	def get(self):
 		gamerKeyStr = self.request.get('key')
@@ -164,13 +170,44 @@ class UserPage(webapp2.RequestHandler):
 			'gamer': gamer
 		}
 
-		template = JINJA_ENVIRONMENT.get_template('userPage.html')
+		template = JINJA_ENVIRONMENT.get_template('gamer.html')
 		self.response.write(template.render(template_values))
-		
+
+class GamePage(webapp2.RequestHandler):
+
+	def get(self):
+		gameKeyStr = self.request.get('key')
+		game = db.get(db.Key(encoded = gameKeyStr))
+
+		template_values = {
+			'game': game
+		}
+
+		template = JINJA_ENVIRONMENT.get_template('game.html')
+		self.response.write(template.render(template_values))
+
+class CommandPage(webapp2.RequestHandler):
+
+	def get(self):
+		commandKeyStr = self.request.get('key')
+		command = db.get(db.Key(encoded = gameKeyStr))
+		stats = []
+		for gamer in command.gamers:
+			stats.extend(gamer.stats)
+
+		template_values = {
+			'command': command,
+			'stats': stats,
+		}
+
+		template = JINJA_ENVIRONMENT.get_template('command.html')
+		self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication(
 	[('/', MainPage),
 	('/add', AddPage),
-	('/user', UserPage),
+	('/Gamer', GamerPage),
+	('/Game', GamePage),
+	('/Command', CommandPage),
 	],
 	debug = True)
