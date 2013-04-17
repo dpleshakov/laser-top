@@ -1,0 +1,69 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Laser-TOP</title>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
+</head>
+<body>
+	<div id="header">Портал статистики <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></div>
+	<div id="main">
+		<div id="info">
+			<table>
+				<tr>
+					<th colspan="2" class="text-center">Информация о игроке</th>
+				</tr>
+				<tr>
+					<td class="text-right">Имя:</td>
+					<td>{{ gamer.name }}</td>
+				</tr>
+				<tr>
+					<td class="text-right">Ник:</td>
+					<td>{{ gamer.nick }}</td>
+				</tr>
+				<tr>
+					<td class="text-right">Команда:</td>
+					<td>{{ gamer.command.name }}</td>
+				</tr>
+				<tr>
+					<td class="text-right">Количество игр:</td>
+					<td>{{ gamer.gameCount }}</td>
+				</tr>
+			</table>
+		</div>
+		<div id="achives">
+		</div>
+		<div id="stats">
+			<table class="elements-center">
+				<tr>
+					<th colspan="8">Статистика за все время</th>
+				</tr>
+				<tr>
+					<th>Дата</th>
+					<th>Цвет</th>
+					<th>Рейтинг</th>
+					<th>Точность</th>
+					<th>Урон</th>
+					<th>Количество смертей</th>
+					<th>Количество ранений</th>
+					<th>Использовано патронов</th>
+				</tr>
+				{% for stat in gamer.stats %}
+				<tr>	
+					<td>{{ stat.game.date }}</td>
+					<td>{{ stat.color }}</td>
+					<td>{{ stat.rating }}</td>
+					<td>{{ stat.accuracy }}</td>
+					<td>{{ stat.damage }}</td>
+					<td>{{ stat.countOfDeaths }}</td>
+					<td>{{ stat.countOfInjuries }}</td>
+					<td>{{ stat.usedCartridge }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div id="plots">
+		</div>
+	</div>
+	<footer>&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a></footer>
+</body>
+</html>
