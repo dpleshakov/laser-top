@@ -1,67 +1,58 @@
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Laser-TOP</title>
-	<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
-</head>
-<body>
-	<div id="header">Портал статистики <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></div>
-	<div id="main">
-		<div id="info">
-			<table>
-				<tr>
-					<th colspan="2" class="text-center">Информация о игре</th>
-				</tr>
-				<tr>
-					<td class="text-right">Дата:</td>
-					<td>{{ game.date }}</td>
-				</tr>
-				<tr>
-					<td class="text-right">Количество игроков:</td>
-					<td>{{ game.gamersCount }}</td>
-				</tr>
-			</table>
-		</div>
-		<div id="achives">
-			Достижения:<br>
-			<ul>
-				{% for achievement in game.achievements %}
-				<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена {{ achievement.gamer.name }}</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<div id="stats">
-			<table class="elements-center">
-				<tr>
-					<th colspan="9">Игровая статистика</th>
-				</tr>
-				<tr>
-					<th>Имя</th>
-					<th>Цвет</th>
-					<th>Рейтинг</th>
-					<th>Точность</th>
-					<th>Урон</th>
-					<th>Количество смертей</th>
-					<th>Количество ранений</th>
-					<th>Использовано патронов</th>
-				</tr>
-				{% for stat in game.stats %}
-				<tr>	
-					<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
-					<td>{{ stat.color }}</td>
-					<td>{{ stat.rating }}</td>
-					<td>{{ stat.accuracy }}</td>
-					<td>{{ stat.damage }}</td>
-					<td>{{ stat.countOfDeaths }}</td>
-					<td>{{ stat.countOfInjuries }}</td>
-					<td>{{ stat.usedCartridge }}</td>
-				</tr>
-				{% endfor %}
-			</table>
-		</div>
-		<div id="plots">
-		</div>
-	</div>
-	<footer>&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a></footer>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block main %}
+<div id="info">
+	<table>
+		<tr>
+			<th colspan="2" class="text-center">Информация о игре</th>
+		</tr>
+		<tr>
+			<td class="text-right">Дата:</td>
+			<td>{{ game.date }}</td>
+		</tr>
+		<tr>
+			<td class="text-right">Количество игроков:</td>
+			<td>{{ game.gamersCount }}</td>
+		</tr>
+	</table>
+</div>
+<div id="achives">
+	Достижения:<br>
+	<ul>
+		{% for achievement in game.achievements %}
+		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена {{ achievement.gamer.name }}</li>
+		{% endfor %}
+	</ul>
+</div>
+<div id="stats">
+	<table class="elements-center">
+		<tr>
+			<th colspan="9">Игровая статистика</th>
+		</tr>
+		<tr>
+			<th>Имя</th>
+			<th>Цвет</th>
+			<th>Рейтинг</th>
+			<th>Точность</th>
+			<th>Урон</th>
+			<th>Количество смертей</th>
+			<th>Количество ранений</th>
+			<th>Использовано патронов</th>
+		</tr>
+		{% for stat in game.stats %}
+		<tr>	
+			<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
+			<td>{{ stat.color }}</td>
+			<td>{{ stat.rating }}</td>
+			<td>{{ stat.accuracy }}</td>
+			<td>{{ stat.damage }}</td>
+			<td>{{ stat.countOfDeaths }}</td>
+			<td>{{ stat.countOfInjuries }}</td>
+			<td>{{ stat.usedCartridge }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+<div id="plots">
+</div>
+{% endblock %}

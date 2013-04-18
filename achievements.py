@@ -3,6 +3,7 @@ from google.appengine.ext import db
 import jinja2
 import os
 import datetime, time
+import sys
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -44,7 +45,7 @@ class Game(db.Model):
 	def keyStr(self):
 		return str(self.key())
 
-	@property:
+	@property
 	def gamersCount(self):
 		return self.stats.count()
 
@@ -75,12 +76,10 @@ class Achievement(db.Model):
 def GetAchievementType(name, level):
 	return AchievementType.all().filter('name = ', name).filter('level = ', level).fetch(1)
 
-def SetAchievements(game, gameStat, achievementName):
-	
-
 def RecalculateGameOneAchievement(game, statisticName, achievementName):
-	 stats = game.stats.all().order(statisticName)
-	 Achievement(
+	stats = game.stats.order(statisticName)
+	print >> sys.stderr, db.get(stats[0].gamer.key())
+	Achievement(
 		achievementType = GetAchievementType(achievementName, "Gold"),
 		game = game,
 		gamer = stats[0].gamer).put()
@@ -91,13 +90,10 @@ def RecalculateGameOneAchievement(game, statisticName, achievementName):
 	Achievement(
 		achievementType = GetAchievementType(achievementName, "Bronze"),
 		game = game,
-		gamer = stats[2].gamer).put()
-
-def RecalculateGameAchievements(game):
-	
+		gamer = stats[2].gamer).put()	
 
 def RecalculateAchievements():
-	allGames = Games.all()
+	allGames = Game.all()
 	for currentGame in allGames:
 		RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
 		RecalculateGameOneAchievement(currentGame, 'accuracy', 'Sniper')
@@ -129,6 +125,6 @@ def GenerateAchievementsTypes():
 	# AchievementType(name = "Collector", level = "Silver").put()
 	# AchievementType(name = "Collector", level = "Bronze").put()
 
-if not db.AchievementType.all().count() > 0:
+if not AchievementType.all().count() > 0:
 	GenerateAchievementsTypes()
 RecalculateAchievements()

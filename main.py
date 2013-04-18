@@ -3,9 +3,11 @@ from google.appengine.ext import db
 import jinja2
 import os
 import datetime, time
+import sys
+import logging
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
 ###################################################
 class Command(db.Model):
@@ -44,7 +46,7 @@ class Game(db.Model):
 	def keyStr(self):
 		return str(self.key())
 
-	@property:
+	@property
 	def gamersCount(self):
 		return self.stats.count()
 
@@ -71,28 +73,38 @@ class Achievement(db.Model):
 	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
 
 ###################################################
+@db.transactional
+def AddGamer(name, nick):
+	gamer = Gamer(name = name, nick = nick)
+	gamer.put()
+	return gamer
+
+@db.transactional
+def AddGame(date):
+	game = Game(date = date)
+	game.put()
+	return game
+
 def GetGamer(name, nick):
 	gamer = Gamer.gql("WHERE name = :1", name)
 	if gamer.count() > 0:
 		return gamer[0]
 
-	gamer = Gamer(name = name, nick = nick)
-	gamer.put()
-
-	return gamer
+	return AddGamer(name, nick)
 
 def GetGame(date):
+	logging.info("date = '" + str(date) + "'")
 	game = Game.gql("WHERE date = :1", date)
+	logging.info('game.count() = ' + str(game.count()))
 	if game.count() > 0:
 		return game[0]
 
-	game = Game(date = date)
-	game.put()
-
-	return game
+	return AddGame(date)
 
 def StrToDate(dateAsStr):
+	# logging.info("dateAsStr = '" + dateAsStr + "'")
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
+	# logging.info("dateAsTime = '" + str(dateAsTime) + "'")
 	return datetime.date(dateAsTime.tm_year, dateAsTime.tm_mon, dateAsTime.tm_mday)
 
 def ParseLine(line):
@@ -114,9 +126,8 @@ def ParseLine(line):
 
 def Parse(text):
 	char = '\n'
-	text.replace(' ', '')
-	text.replace('%', '')
-	text.replace(',', '.')
+	text = text.replace('%', '')
+	text = text.replace(',', '.')
 	splitedText = text.split(char)
 	for line in splitedText:
 		ParseLine(line)
@@ -157,8 +168,18 @@ class AddPage(webapp2.RequestHandler):
 		self.response.write(template.render())
 
 	def post(self):
-		Parse(self.request.get('stats'))
-		self.redirect('/')
+		try:
+			Parse(self.request.get('stats'))
+			self.redirect('/')
+
+			txn.commit();
+		except:
+			template_values = {
+				'errors': unicode(sys.exc_info()[1]),
+			}
+
+			template = JINJA_ENVIRONMENT.get_template('add.html')
+			self.response.write(template.render(template_values))
 
 class GamerPage(webapp2.RequestHandler):
 
@@ -206,12 +227,13 @@ class CommandPage(webapp2.RequestHandler):
 
 		template = JINJA_ENVIRONMENT.get_template('command.html')
 		self.response.write(template.render(template_values))
-
+	
 app = webapp2.WSGIApplication(
 	[('/', MainPage),
 	('/add', AddPage),
-	('/Gamer', GamerPage),
-	('/Game', GamePage),
-	('/Command', CommandPage),
+	('/gamer', GamerPage),
+	('/game', GamePage),
+	('/command', CommandPage),
+	# ('/editCommand', EditCommandPage),
 	],
 	debug = True)
