@@ -1,13 +1,26 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+<script>
+	function ChangeDisplay(element) {
+		if (element.style.display == "none") {
+			element.style.display = ''
+		}
+		else {
+			element.style.display = 'none'
+		}
+	}
+</script>
+{% endblock %}
+
 {% block main %}
 <div id="lists">
 	<table>
 		<tr>
 			<td>
 				<div id="gamers">
-					Игроки:<br>
-					<ul>
+					Игроки <a href="#" onclick="ChangeDisplay(document.getElementById('gamersList')); return false;">(скрыть/показать)</a>:<br>
+					<ul id="gamersList">
 						{% for gamer in gamers %}
 						<li>{{ gamer.name }} "{{ gamer.nick }}"" <a href="/user?key={{ gamer.keyStr }}">(профиль)</a></li>
 						{% endfor %}
@@ -16,8 +29,8 @@
 			</td>
 			<td>
 				<div id="commands">
-				Команды:
-				<ul>
+				Команды <a href="#" onclick="ChangeDisplay(document.getElementById('commandsList')); return false;">(скрыть/показать)</a>:
+				<ul id="commandsList">
 					{% for command in commands %}
 					<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a></li>
 					{% endfor %}
@@ -26,8 +39,8 @@
 			</td>
 			<td>
 				<div id="games">
-				Игры:
-				<ul>
+				Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
+				<ul id="gamesList">
 					{% for game in games %}
 					<li>Игра {{ game.date }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
 					{% endfor %}
