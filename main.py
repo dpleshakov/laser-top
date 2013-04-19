@@ -147,7 +147,7 @@ def GetOrder(request):
 	orderBy = request.get('orderBy')
 	if not orderBy:
 		orderBy = 'rating'
-		suffix = ''
+		suffix = '-'
 	elif orderBy[0] == '-':
 		suffix = '-'
 	else:
@@ -168,12 +168,15 @@ class MainPage(webapp2.RequestHandler):
 		orderBy, suffix = GetOrder(self.request)
 
 		gamers = Gamer.all().order('name')
-		commands = Comand.all().order('name')
+		commands = Command.all().order('name')
 		statistics = Statistic.all().order(suffix + orderBy)
+		# statistics = Statistic.all().order("-" + "rating")
+		games = Game.all().order('date')
 
 		template_values = {
 			'gamers': gamers,
 			'commands': commands,
+			'games': games,
 			'statistics': statistics,
 			'orderBy': orderBy,
 			'suffix': ConvertSuffix(suffix),

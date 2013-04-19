@@ -63,3 +63,4 @@ class Achievement(db.Model):
 	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
 
 ######################################################################################################
+# Accuracy(game.date)

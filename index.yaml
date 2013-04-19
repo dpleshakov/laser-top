@@ -1,0 +1,101 @@
+indexes:
+
+- kind: Command
+  ancestor: yes
+  properties:
+  - name: name
+
+- kind: Gamer
+  ancestor: yes
+  properties:
+  - name: name
+
+- kind: Gamer
+  ancestor: yes
+  properties:
+  - name: nick
+
+- kind: Gamer
+  ancestor: yes
+  properties:
+  - name: command
+
+- kind: Game
+  ancestor: yes
+  properties:
+  - name: date
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: game
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: color
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: gamer
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: rating
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: accuracy
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: damage
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: countOfDeaths
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: countOfInjuries
+
+- kind: Statistic
+  ancestor: yes
+  properties:
+  - name: usedCartridge
+
+- kind: AchievementType
+  ancestor: yes
+  properties:
+  - name: name
+
+- kind: AchievementType
+  ancestor: yes
+  properties:
+  - name: level
+
+- kind: AchievementType
+  ancestor: yes
+  properties:
+  - name: image
+
+- kind: Achievement
+  ancestor: yes
+  properties:
+  - name: achievementType
+
+- kind: Achievement
+  ancestor: yes
+  properties:
+  - name: game
+
+- kind: Achievement
+  ancestor: yes
+  properties:
+  - name: gamer

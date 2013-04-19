@@ -1,5 +1,6 @@
 import datetime, time
 import sys
+import logging
 
 from google.appengine.ext import db
 
@@ -68,12 +69,12 @@ class Achievement(db.Model):
 ######################################################################################################
 def GetAchievementType(name, level):
 	achievementType = AchievementType.all().filter('name = ', name).filter('level = ', level)[0]
-	loggin.info("Find achievementType = " + achievementType.name + "'")
+	logging.info("Find achievementType = " + achievementType.name + "'")
 	return achievementType
 
 ###################################################
 def RecalculateGameOneAchievement(game, statisticName, achievementName):
-	loggin.info("RecalculateGameOneAchievement('" + str(game.date) + "', '" + statisticName + "', '" + achievementName + "').")
+	logging.info("RecalculateGameOneAchievement('" + str(game.date) + "', '" + statisticName + "', '" + achievementName + "').")
 	stats = game.stats.order(statisticName)
 	if stats.count() > 0:
 		achievement = Achievement(
@@ -81,25 +82,25 @@ def RecalculateGameOneAchievement(game, statisticName, achievementName):
 			game = game,
 			gamer = stats[0].gamer)
 		achievement.put()
-		loggin.info("Add gold achievement '" + achievementName + "'.")
+		logging.info("Add gold achievement '" + achievementName + "'.")
 	if stats.count() > 1:
 		achievement = Achievement(
 			achievementType = GetAchievementType(achievementName, "Silver"),
 			game = game,
 			gamer = stats[1].gamer)
 		achievement.put()
-		loggin.info("Add silver achievement '" + achievementName + "'.")
+		logging.info("Add silver achievement '" + achievementName + "'.")
 	if stats.count() > 2:
 		achievement = Achievement(
 			achievementType = GetAchievementType(achievementName, "Bronze"),
 			game = game,
 			gamer = stats[2].gamer)
 		achievement.put()
-		loggin.info("Add bronze achievement '" + achievementName + "'.")
+		logging.info("Add bronze achievement '" + achievementName + "'.")
 
 ###################################################
 def RecalculateAchievements():
-	loggin.info("RecalculateAchievements().")
+	logging.info("RecalculateAchievements().")
 	allGames = Game.all()
 	for currentGame in allGames:
 		RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
@@ -109,7 +110,7 @@ def RecalculateAchievements():
 
 ###################################################
 def GenerateAchievementsTypes():
-	loggin.info("Initially creating of achievement types.")
+	logging.info("Initially creating of achievement types.")
 	AchievementType(name = "Warrior", level = "Gold").put()
 	AchievementType(name = "Warrior", level = "Silver").put()
 	AchievementType(name = "Warrior", level = "Bronze").put()
@@ -140,4 +141,4 @@ try:
 		GenerateAchievementsTypes()
 	RecalculateAchievements()
 except:
-	loggin.error("Error in RecalculateAchievements: " + sys.exc_info()[1])
+	logging.error("Error in RecalculateAchievements: " + str(sys.exc_info()[1]))

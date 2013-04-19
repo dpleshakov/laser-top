@@ -30,14 +30,14 @@
 			<th colspan="9">Игровая статистика</th>
 		</tr>
 		<tr>
-			<th><a href="?orderBy={{ suffix }}gamer.name">Имя</a></th>
-			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
-			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
-			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
-			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
-			<th><a href="?orderBy={{ suffix }}usedCartridge">Использовано патронов</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}gamer.name">Имя</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}color">Цвет</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}rating">Рейтинг</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}accuracy">Точность</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}damage">Урон</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
+			<th><a href="?key={{ game.keyStr }}&orderBy={{ suffix }}usedCartridge">Использовано патронов</a></th>
 		</tr>
 		{% for stat in stats %}
 		<tr>	
