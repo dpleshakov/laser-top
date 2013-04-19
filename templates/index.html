@@ -35,7 +35,7 @@
 				Команды <a href="#" onclick="ChangeDisplay(document.getElementById('commandsList')); return false;">(скрыть/показать)</a>:
 				<ul id="commandsList">
 					{% for command in commands %}
-					<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a></li>
+					<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
 					{% endfor %}
 				</ul>
 			</div>

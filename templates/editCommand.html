@@ -8,14 +8,14 @@
 		</tr>
 		<tr>
 			<td class="text-right">Название команды:</td>
-			<td>Норфолк</td>
+			<td>{{ command.name }}</td>
 		</tr>
 		<tr>
 			<td class="text-right">Список игроков:</td>
 			<td>
 				<ul>
-					{% for gamer in gamers %}
-					<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer.name }} ({{ gamer.nick }})</a></li>
+					{% for gamer in command.gamers %}
+					<li><a href="/gamer?key={{ gamer.keyStr }}">{{ gamer.name }} ({{ gamer.nick }})</a></li>
 					{% endfor %}
 				</ul>
 			</td>
@@ -24,10 +24,14 @@
 			<tr>
 				<td>Добавить игрока:</td>
 				<td>
-					<select>
-						<option>Плешаков Дмитрий (Fearing)</option>
-						<option>Василий Петров (loh3333)</option>
-					</select>
+					<form action="/editCommand" method="post">
+						<select name="addedGamer" onchange='this.form.submit();'>
+							{% for gamer in gamers %}
+							<option value='{{ gamer.keyStr }}'>{{ gamer.name }} ({{ gamer.nick }})</option>
+							{% endfor %}
+						</select>
+						<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
+					</form>
 				</td>
 				<td><button>Добавить</button></td>
 			</tr>

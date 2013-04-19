@@ -269,7 +269,34 @@ class CommandPage(webapp2.RequestHandler):
 
 		template = JINJA_ENVIRONMENT.get_template('command.html')
 		self.response.write(template.render(template_values))
-	
+
+###################################################
+class EditCommandPage(webapp2.RequestHandler):
+	def get(self):
+		commandKeyStr = self.request.get('key')
+		command = db.get(db.Key(encoded = commandKeyStr))
+
+		gamers = Gamer.all().filter('command != ', command)
+
+		template_values = {
+			'command': command,
+			'gamers': gamers,
+		}
+
+		template = JINJA_ENVIRONMENT.get_template('command.html')
+		self.response.write(template.render(template_values))
+
+	def post(self):
+		addedGamerKeyStr = self.request.get('addedGamer')
+		addedGamer = db.get(db.Key(encoded = addedGamerKeyStr))
+
+		commandKeyStr = self.request.get('commandKey')
+		command = db.get(db.Key(encoded = commandKeyStr))
+
+		addedGamer.command = command
+		# put?
+		self.redirect('/editCommand?key=' + command.keyStr)
+
 ######################################################################################################
 app = webapp2.WSGIApplication(
 	[('/', MainPage),
@@ -277,6 +304,6 @@ app = webapp2.WSGIApplication(
 	('/gamer', GamerPage),
 	('/game', GamePage),
 	('/command', CommandPage),
-	# ('/editCommand', EditCommandPage),
+	('/editCommand', EditCommandPage),
 	],
 	debug = True)
