@@ -126,6 +126,7 @@ def ParseLine(line):
 			usedCartridge = int(splitedLine[9]),
 			)
 	stat.put()
+	logging.info("Add new statistic, gamer = '" + stat.gamer.name + "', game = '" + str(stat.game.date) + "'.")
 
 def Parse(text):
 	char = '\n'
