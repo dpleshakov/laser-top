@@ -1,54 +1,46 @@
-import webapp2
-from google.appengine.ext import db
-import jinja2
-import os
 import datetime, time
 import sys
 
-JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+from google.appengine.ext import db
 
-###################################################
+######################################################################################################
 class Command(db.Model):
 	name = db.StringProperty(required = True)
 	# gamers
-
 	@property
 	def keyStr(self):
 		return str(self.key())
-
 	@property
 	def gamersCount(self):
 		return self.gamers.count()
 
+###################################################
 class Gamer(db.Model):
 	name = db.StringProperty(required = True)
 	nick = db.StringProperty()
 	command = db.ReferenceProperty(Command, collection_name = 'gamers')
 	# stats
 	# achievements
-
 	@property
 	def keyStr(self):
 		return str(self.key())
-
 	@property
 	def gamesCount(self):
 		return self.stats.count()
 
+###################################################
 class Game(db.Model):
 	date = db.DateProperty(required = True)
 	# stats
 	# achievements
-
 	@property
 	def keyStr(self):
 		return str(self.key())
-
 	@property
 	def gamersCount(self):
 		return self.stats.count()
 
+###################################################
 class Statistic(db.Model):
 	game = db.ReferenceProperty(Game, collection_name = 'stats', required = True)
 	color = db.StringProperty(required = True)
@@ -60,39 +52,54 @@ class Statistic(db.Model):
 	countOfInjuries = db.IntegerProperty(required = True)
 	usedCartridge = db.IntegerProperty(required = True)
 
+###################################################
 class AchievementType(db.Model):
 	name = db.StringProperty(required = True)
 	level = db.StringProperty(required = True)
 	image = db.LinkProperty(default = None)
 	# achievements
-	
+
+###################################################
 class Achievement(db.Model):
 	achievementType = db.ReferenceProperty(AchievementType, collection_name = 'achievements', required = True)
 	game = db.ReferenceProperty(Game, collection_name = 'achievements', required = True)
 	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
 
-###################################################
-
+######################################################################################################
 def GetAchievementType(name, level):
-	return AchievementType.all().filter('name = ', name).filter('level = ', level).fetch(1)
+	achievementType = AchievementType.all().filter('name = ', name).filter('level = ', level)[0]
+	loggin.info("Find achievementType = " + achievementType.name + "'")
+	return achievementType
 
+###################################################
 def RecalculateGameOneAchievement(game, statisticName, achievementName):
+	loggin.info("RecalculateGameOneAchievement('" + str(game.date) + "', '" + statisticName + "', '" + achievementName + "').")
 	stats = game.stats.order(statisticName)
-	print >> sys.stderr, db.get(stats[0].gamer.key())
-	Achievement(
-		achievementType = GetAchievementType(achievementName, "Gold"),
-		game = game,
-		gamer = stats[0].gamer).put()
-	Achievement(
-		achievementType = GetAchievementType(achievementName, "Silver"),
-		game = game,
-		gamer = stats[1].gamer).put()
-	Achievement(
-		achievementType = GetAchievementType(achievementName, "Bronze"),
-		game = game,
-		gamer = stats[2].gamer).put()	
+	if stats.count() > 0:
+		achievement = Achievement(
+			achievementType = GetAchievementType(achievementName, "Gold"),
+			game = game,
+			gamer = stats[0].gamer)
+		achievement.put()
+		loggin.info("Add gold achievement '" + achievementName + "'.")
+	if stats.count() > 1:
+		achievement = Achievement(
+			achievementType = GetAchievementType(achievementName, "Silver"),
+			game = game,
+			gamer = stats[1].gamer)
+		achievement.put()
+		loggin.info("Add silver achievement '" + achievementName + "'.")
+	if stats.count() > 2:
+		achievement = Achievement(
+			achievementType = GetAchievementType(achievementName, "Bronze"),
+			game = game,
+			gamer = stats[2].gamer)
+		achievement.put()
+		loggin.info("Add bronze achievement '" + achievementName + "'.")
 
+###################################################
 def RecalculateAchievements():
+	loggin.info("RecalculateAchievements().")
 	allGames = Game.all()
 	for currentGame in allGames:
 		RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
@@ -100,7 +107,9 @@ def RecalculateAchievements():
 		RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Kamikaze')
 		RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Tra-ta-ta')
 
+###################################################
 def GenerateAchievementsTypes():
+	loggin.info("Initially creating of achievement types.")
 	AchievementType(name = "Warrior", level = "Gold").put()
 	AchievementType(name = "Warrior", level = "Silver").put()
 	AchievementType(name = "Warrior", level = "Bronze").put()
@@ -125,6 +134,10 @@ def GenerateAchievementsTypes():
 	# AchievementType(name = "Collector", level = "Silver").put()
 	# AchievementType(name = "Collector", level = "Bronze").put()
 
-if not AchievementType.all().count() > 0:
-	GenerateAchievementsTypes()
-RecalculateAchievements()
+######################################################################################################
+try:
+	if not AchievementType.all().count() > 0:
+		GenerateAchievementsTypes()
+	RecalculateAchievements()
+except:
+	loggin.error("Error in RecalculateAchievements: " + sys.exc_info()[1])
