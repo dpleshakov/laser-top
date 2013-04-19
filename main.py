@@ -80,6 +80,7 @@ def AddGamer(name, nick):
 	logging.info("Add new Gamer('" + name + "', '" + nick + "').")
 	return gamer
 
+###################################################
 @db.transactional
 def AddGame(date):
 	game = Game(date = date)
@@ -87,6 +88,7 @@ def AddGame(date):
 	logging.info("Add new Game('" + str(date) + "').")
 	return game
 
+###################################################
 def GetGamer(name, nick):
 	gamer = Gamer.gql("WHERE name = :1", name)
 	if gamer.count() > 0:
@@ -95,6 +97,7 @@ def GetGamer(name, nick):
 
 	return AddGamer(name, nick)
 
+###################################################
 def GetGame(date):
 	game = Game.gql("WHERE date = :1", date)
 	if game.count() > 0:
@@ -103,12 +106,14 @@ def GetGame(date):
 
 	return AddGame(date)
 
+###################################################
 def StrToDate(dateAsStr):
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
 	date = datetime.date(dateAsTime.tm_year, dateAsTime.tm_mon, dateAsTime.tm_mday)
 	logging.info("Convert '" + dateAsTime + "' to '" + str(date) + "'.")
 	return date
 
+###################################################
 def ParseLine(line):
 	char = '\t'
 	logging.info("Line to parse '" + line + "'.")
@@ -128,6 +133,7 @@ def ParseLine(line):
 	stat.put()
 	logging.info("Add new statistic, gamer = '" + stat.gamer.name + "', game = '" + str(stat.game.date) + "'.")
 
+###################################################
 def Parse(text):
 	char = '\n'
 	text = text.replace('%', '')
@@ -136,6 +142,7 @@ def Parse(text):
 	for line in splitedText:
 		ParseLine(line)
 
+###################################################
 def GetOrder(request):
 	orderBy = request.get('orderBy')
 	if not orderBy:
@@ -148,6 +155,7 @@ def GetOrder(request):
 
 	return orderBy, suffix
 
+###################################################
 def ConvertSuffix(suffix):
 	if suffix == '-':
 		return ''
