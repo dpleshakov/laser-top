@@ -25,7 +25,7 @@
 					Игроки <a href="#" onclick="ChangeDisplay(document.getElementById('gamersList')); return false;">(скрыть/показать)</a>:<br>
 					<ul id="gamersList">
 						{% for gamer in gamers %}
-						<li>{{ gamer.name }} "{{ gamer.nick }}"" <a href="/user?key={{ gamer.keyStr }}">(профиль)</a></li>
+						<li>{{ gamer.name }} "{{ gamer.nick }}"" <a href="/gamer?key={{ gamer.keyStr }}">(профиль)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
