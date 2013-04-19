@@ -9,7 +9,7 @@
 					Игроки:<br>
 					<ul>
 						{% for gamer in gamers %}
-						<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer.name }} ({{ gamer.nick }})</a></li>
+						<li>{{ gamer.name }} "{{ gamer.nick }}"" <a href="/user?key={{ gamer.keyStr }}">(профиль)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -19,7 +19,7 @@
 				Команды:
 				<ul>
 					{% for command in commands %}
-					<li><a href="#">{{ command.name }}</a></li>
+					<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a></li>
 					{% endfor %}
 				</ul>
 			</div>
@@ -29,7 +29,7 @@
 				Игры:
 				<ul>
 					{% for game in games %}
-					<li><a href="/game?key={{ game.keyStr }}">{{ game.date }}</a></li>
+					<li>Игра {{ game.date }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
 					{% endfor %}
 				</ul>
 			</div>
@@ -43,15 +43,15 @@
 			<th colspan="9">Игровая статистика за все время</th>
 		</tr>
 		<tr>
-			<th>Дата</th>
-			<th><a href="/?orderBy=color&isDescending={{ isDescending }}">Цвет</a></th>
-			<th>Имя игрока</th>
-			<th><a href="/?orderBy=rating&isDescending={{ isDescending }}">Рейтинг</a></th>
-			<th><a href="/?orderBy=accuracy&isDescending={{ isDescending }}">Точность</a></th>
-			<th><a href="/?orderBy=damage&isDescending={{ isDescending }}">Урон</a></th>
-			<th><a href="/?orderBy=countOfDeaths&isDescending={{ isDescending }}">Количество смертей</a></th>
-			<th><a href="/?orderBy=countOfInjuries&isDescending={{ isDescending }}">Количество ранений</a></th>
-			<th><a href="/?orderBy=usedCartridge&isDescending={{ isDescending }}">Испольовано патронов</a></th>
+			<th><a href="?orderBy={{ suffix }}game.date">Дата</a></th>
+			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
+			<th><a href="?orderBy={{ suffix }}gamer.name">Имя игрока</a></th>
+			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
+			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
+			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
+			<th><a href="?orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
+			<th><a href="?orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
+			<th><a href="?orderBy={{ suffix }}usedCartridge">Испольовано патронов</a></th>
 		</tr>
 		{% for stat in statistics %}
 		<tr>

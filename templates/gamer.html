@@ -38,16 +38,16 @@
 			<th colspan="8">Статистика за все время</th>
 		</tr>
 		<tr>
-			<th>Дата</th>
-			<th>Цвет</th>
-			<th>Рейтинг</th>
-			<th>Точность</th>
-			<th>Урон</th>
-			<th>Количество смертей</th>
-			<th>Количество ранений</th>
-			<th>Использовано патронов</th>
+			<th><a href="?orderBy={{ suffix }}game.date">Дата</a></th>
+			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
+			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
+			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
+			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
+			<th><a href="?orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
+			<th><a href="?orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
+			<th><a href="?orderBy={{ suffix }}usedCartridge">Использовано патронов</a></th>
 		</tr>
-		{% for stat in gamer.stats %}
+		{% for stat in stats %}
 		<tr>	
 			<td>{{ stat.game.date }}</td>
 			<td>{{ stat.color }}</td>
