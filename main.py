@@ -208,7 +208,9 @@ class GamerPage(webapp2.RequestHandler):
 		orderBy, suffix = GetOrder(self.request)
 
 		gamerKeyStr = self.request.get('key')
+		logging.info("gamerKeyStr = " + gamerKeyStr)
 		gamer = db.get(db.Key(encoded = gamerKeyStr))
+		logging.info("Find gamer = '" + gamer.name + "'.")
 		stats = gamer.stats.order(suffix + orderBy)
 
 		template_values = {
@@ -226,7 +228,9 @@ class GamePage(webapp2.RequestHandler):
 		orderBy, suffix = GetOrder(self.request)
 
 		gameKeyStr = self.request.get('key')
+		logging.info("gameKeyStr = " + gameKeyStr)
 		game = db.get(db.Key(encoded = gameKeyStr))
+		logging.info("Find game = '" + str(game.date) + "'.")
 		stats = game.stats.order(suffix + orderBy)
 
 		template_values = {
