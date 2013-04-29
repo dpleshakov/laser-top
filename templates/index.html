@@ -45,7 +45,7 @@
 					Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
 					<ul id="gamesList">
 						{% for game in games %}
-						<li>Игра {{ game.date }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
+						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
