@@ -174,35 +174,12 @@ def Parse(text):
 		stats.append(ParseLine(line))
 	AddStats(stats)
 
-###################################################
-def GetOrder(request):
-	orderBy = request.get('orderBy')
-	if not orderBy:
-		orderBy = 'rating'
-		suffix = '-'
-	elif orderBy[0] == '-':
-		suffix = '-'
-	else:
-		suffix = ''
-
-	return orderBy, suffix
-
-###################################################
-def ConvertSuffix(suffix):
-	if suffix == '-':
-		return ''
-	else:
-		return '-'
-
 ######################################################################################################
 class MainPage(webapp2.RequestHandler):
 	def get(self):
-		orderBy, suffix = GetOrder(self.request)
-
 		gamers = Gamer.all().order('name')
 		commands = Command.all().order('name')
-		statistics = Statistic.all().order(suffix + orderBy)
-		# statistics = Statistic.all().order("-" + "rating")
+		statistics = Statistic.all().order('-rating')
 		games = Game.all().order('date')
 
 		template_values = {
@@ -210,8 +187,6 @@ class MainPage(webapp2.RequestHandler):
 			'commands': commands,
 			'games': games,
 			'statistics': statistics,
-			'orderBy': orderBy,
-			'suffix': ConvertSuffix(suffix),
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -238,17 +213,14 @@ class AddPage(webapp2.RequestHandler):
 ###################################################
 class GamerPage(webapp2.RequestHandler):
 	def get(self):
-		orderBy, suffix = GetOrder(self.request)
-
 		gamerKeyStr = self.request.get('key')
 		logging.info("gamerKeyStr = " + gamerKeyStr)
 		gamer = db.get(db.Key(encoded = gamerKeyStr))
 		logging.info("Find gamer = '" + gamer.name + "'.")
-		stats = gamer.stats.order(suffix + orderBy)
+		stats = gamer.stats.order('game')
 
 		template_values = {
 			'gamer': gamer,
-			'suffix': ConvertSuffix(suffix),
 			'stats': stats,
 		}
 
@@ -258,17 +230,14 @@ class GamerPage(webapp2.RequestHandler):
 ###################################################
 class GamePage(webapp2.RequestHandler):
 	def get(self):
-		orderBy, suffix = GetOrder(self.request)
-
 		gameKeyStr = self.request.get('key')
 		logging.info("gameKeyStr = " + gameKeyStr)
 		game = db.get(db.Key(encoded = gameKeyStr))
 		logging.info("Find game = '" + str(game.date) + "'.")
-		stats = game.stats.order(suffix + orderBy)
+		stats = game.stats.order("-rating")
 
 		template_values = {
 			'game': game,
-			'suffix': ConvertSuffix(suffix),
 			'stats': stats,
 		}
 
@@ -278,17 +247,9 @@ class GamePage(webapp2.RequestHandler):
 ###################################################
 class CommandPage(webapp2.RequestHandler):
 	def get(self):
-		orderBy, suffix = GetOrder(self.request)
-
 		commandKeyStr = self.request.get('key')
 		command = db.get(db.Key(encoded = gameKeyStr))
-		
-		# stats = []
-		# achievements = []
-		# for gamer in command.gamers:
-		# 	stats.extend(gamer.stats)
-		# 	achievements.extend(gamer.achievements)
-		stats = Statistic.all().filter("gamer.command = ", command).order(suffix + orderBy)
+		stats = Statistic.all().filter("gamer.command = ", command).order("gamer")
 		achievements = Achievement.all().filter("gamer.command = ", command)
 
 		# !!! SORT IT !!!
@@ -297,7 +258,6 @@ class CommandPage(webapp2.RequestHandler):
 			'command': command,
 			'stats': stats,
 			'achievements': achievements,
-			'suffix': ConvertSuffix(suffix),
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('command.html')
@@ -360,6 +320,6 @@ app = webapp2.WSGIApplication(
 	('/game', GamePage),
 	('/command', CommandPage),
 	('/editCommand', EditCommandPage),
-	('addCommand', AddCommand),
+	('/addCommand', AddCommand),
 	],
 	debug = True)

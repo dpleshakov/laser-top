@@ -1,54 +1,54 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script type="text/javascript">
-		google.load('visualization', '1.0', {'packages':['corechart']});
-		google.setOnLoadCallback(drawChart);
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load('visualization', '1.0', {'packages':['corechart']});
+	google.setOnLoadCallback(drawChart);
 
-		function drawChart() {
-			var data = new google.visualization.DataTable();
-			data.addColumn('string', 'Игрок');
-			data.addColumn('number', 'Рейтинг');
-			{% for stat in stats %}
-			data.addRow(
-				[{{ stat.gamer.name }}, {{ stat.rating }}]
-			);
-			{% endfor %}
+	function drawChart() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Игрок');
+		data.addColumn('number', 'Рейтинг');
+		{% for stat in stats %}
+		data.addRow(
+			['{{ stat.gamer.name }}', {{ stat.rating }}]
+		);
+		{% endfor %}
 
-			var options = {'title':'Вклад игрока в суммарный рейтинг',
-				'width':400,
-				'height':300};
+		var options = {'title':'Вклад игрока в суммарный рейтинг',
+			'width':700,
+			'height':400};
 
-			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-			chart.draw(data, options);
-		}
-	</script>
-	<script type='text/javascript'>
-		google.load('visualization', '1', {packages:['table']});
-		google.setOnLoadCallback(drawTable);
+		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
+</script>
+<script type='text/javascript'>
+	google.load('visualization', '1', {packages:['table']});
+	google.setOnLoadCallback(drawTable);
 
-		function drawTable() {
-			var data = new google.visualization.DataTable();
-			data.addColumn('string', 'Имя');
-			data.addColumn('string', 'Цвет');
-			data.addColumn('number', 'Рейтинг');
-			data.addColumn('number', 'Точность');
-			data.addColumn('number', 'Урон');
-			data.addColumn('number', 'Количество смертей');
-			data.addColumn('number', 'Количество ранений');
-			data.addColumn('number', 'Использовано патронов');
+	function drawTable() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Имя');
+		data.addColumn('string', 'Цвет');
+		data.addColumn('number', 'Рейтинг');
+		data.addColumn('number', 'Точность');
+		data.addColumn('number', 'Урон');
+		data.addColumn('number', 'Количество смертей');
+		data.addColumn('number', 'Количество ранений');
+		data.addColumn('number', 'Использовано патронов');
 
-			{% for stat in stats %}
-			data.addRow(
-				['{{ stat.gamer.name }}', '{{ stat.color }}', {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
-			);
-			{% endfor %}
+		{% for stat in stats %}
+		data.addRow(
+			['{{ stat.gamer.name }}', '{{ stat.color }}', {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+		);
+		{% endfor %}
 
-			var table = new google.visualization.Table(document.getElementById('stats'));
-			table.draw(data, {showRowNumber: false});
-		}
-	</script>
+		var table = new google.visualization.Table(document.getElementById('stats'));
+		table.draw(data, {showRowNumber: false});
+	}
+</script>
 {% endblock %}
 
 {% block main %}
@@ -59,7 +59,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">Дата:</td>
-			<td>{{ game.date }}</td>
+			<td>{{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }}</td>
 		</tr>
 		<tr>
 			<td class="text-right">Количество игроков:</td>

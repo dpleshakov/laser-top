@@ -11,6 +11,34 @@
 		}
 	}
 </script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type='text/javascript'>
+		google.load('visualization', '1', {packages:['table']});
+		google.setOnLoadCallback(drawTable);
+
+		function drawTable() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Дата');
+			data.addColumn('string', 'Цвет');
+			data.addColumn('string', 'Игрок');
+			data.addColumn('number', 'Рейтинг');
+			data.addColumn('number', 'Точность');
+			data.addColumn('number', 'Урон');
+			data.addColumn('number', 'Количество смертей');
+			data.addColumn('number', 'Количество ранений');
+			data.addColumn('number', 'Использовано патронов');
+
+			{% for stat in statistics %}
+			data.addRow(
+				['{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}', '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
+				{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+			);
+			{% endfor %}
+
+			var table = new google.visualization.Table(document.getElementById('stats'));
+			table.draw(data, {showRowNumber: false});
+		}
+	</script>
 {% endblock %}
 
 {% block main %}
@@ -25,7 +53,7 @@
 					Игроки <a href="#" onclick="ChangeDisplay(document.getElementById('gamersList')); return false;">(скрыть/показать)</a>:<br>
 					<ul id="gamersList">
 						{% for gamer in gamers %}
-						<li>{{ gamer.name }} "{{ gamer.nick }}" <a href="/gamer?key={{ gamer.keyStr }}&orderBy=-game">(профиль)</a></li>
+						<li>{{ gamer.name }} "{{ gamer.nick }}" <a href="/gamer?key={{ gamer.keyStr }}">(профиль)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -35,7 +63,7 @@
 					Команды <a href="#" onclick="ChangeDisplay(document.getElementById('commandsList')); return false;">(скрыть/показать)</a>:
 					<ul id="commandsList">
 						{% for command in commands %}
-						<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}&orderBy=-rating">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
+						<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -45,7 +73,7 @@
 					Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
 					<ul id="gamesList">
 						{% for game in games %}
-						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}&orderBy=-rating">(статистика)</a></li>
+						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -54,7 +82,7 @@
 	</table>
 </div>
 <div id="stats">
-	<table class="elements-center">
+	<!-- <table class="elements-center">
 		<tr>
 			<th colspan="9">Игровая статистика за все время</th>
 		</tr>
@@ -82,6 +110,6 @@
 			<td>{{ stat.usedCartridge }}</td>
 		</tr>
 		{% endfor %}
-	</table>
+	</table> -->
 </div>
 {% endblock %}

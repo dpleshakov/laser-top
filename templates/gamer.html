@@ -1,5 +1,35 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type='text/javascript'>
+		google.load('visualization', '1', {packages:['table']});
+		google.setOnLoadCallback(drawTable);
+
+		function drawTable() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Дата');
+			data.addColumn('string', 'Цвет');
+			data.addColumn('number', 'Рейтинг');
+			data.addColumn('number', 'Точность');
+			data.addColumn('number', 'Урон');
+			data.addColumn('number', 'Количество смертей');
+			data.addColumn('number', 'Количество ранений');
+			data.addColumn('number', 'Использовано патронов');
+
+			{% for stat in stats %}
+			data.addRow(
+				['{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}', '{{ stat.color }}',
+				{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+			);
+			{% endfor %}
+
+			var table = new google.visualization.Table(document.getElementById('stats'));
+			table.draw(data, {showRowNumber: false});
+		}
+	</script>
+{% endblock %}
+
 {% block main %}
 <div id="info">
 	<table>
@@ -33,7 +63,7 @@
 	</ul>
 </div>
 <div id="stats">
-	<table class="elements-center">
+	<!-- <table class="elements-center">
 		<tr>
 			<th colspan="8">Статистика за все время</th>
 		</tr>
@@ -59,7 +89,7 @@
 			<td>{{ stat.usedCartridge }}</td>
 		</tr>
 		{% endfor %}
-	</table>
+	</table> -->
 </div>
 <div id="plots">
 </div>
