@@ -25,7 +25,7 @@
 					Игроки <a href="#" onclick="ChangeDisplay(document.getElementById('gamersList')); return false;">(скрыть/показать)</a>:<br>
 					<ul id="gamersList">
 						{% for gamer in gamers %}
-						<li>{{ gamer.name }} "{{ gamer.nick }}" <a href="/gamer?key={{ gamer.keyStr }}">(профиль)</a></li>
+						<li>{{ gamer.name }} "{{ gamer.nick }}" <a href="/gamer?key={{ gamer.keyStr }}&orderBy=-game">(профиль)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -35,7 +35,7 @@
 					Команды <a href="#" onclick="ChangeDisplay(document.getElementById('commandsList')); return false;">(скрыть/показать)</a>:
 					<ul id="commandsList">
 						{% for command in commands %}
-						<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
+						<li>{{ command.name }} <a href="/command?key={{ command.keyStr }}&orderBy=-rating">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -45,7 +45,7 @@
 					Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
 					<ul id="gamesList">
 						{% for game in games %}
-						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
+						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}&orderBy=-rating">(статистика)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -59,9 +59,9 @@
 			<th colspan="9">Игровая статистика за все время</th>
 		</tr>
 		<tr>
-			<th><a href="?orderBy={{ suffix }}game.date">Дата</a></th>
+			<th><a href="?orderBy={{ suffix }}game">Дата</a></th>
 			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
-			<th><a href="?orderBy={{ suffix }}gamer.name">Имя игрока</a></th>
+			<th><a href="?orderBy={{ suffix }}gamer">Имя игрока</a></th>
 			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
 			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
 			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
