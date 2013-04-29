@@ -41,7 +41,7 @@
 
 			{% for stat in stats %}
 			data.addRow(
-				[{{ stat.gamer.name }}, {{ stat.color }}, {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+				['{{ stat.gamer.name }}', '{{ stat.color }}', {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
 			);
 			{% endfor %}
 
