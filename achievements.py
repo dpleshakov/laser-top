@@ -75,7 +75,7 @@ def GetAchievementType(name, level):
 ###################################################
 def RecalculateGameOneAchievement(game, statisticName, achievementName):
 	logging.info("RecalculateGameOneAchievement('" + str(game.date) + "', '" + statisticName + "', '" + achievementName + "').")
-	stats = game.stats.order(statisticName)
+	stats = game.stats.order("-" + statisticName)
 	if stats.count() > 0:
 		achievement = Achievement(
 			achievementType = GetAchievementType(achievementName, "Gold"),
