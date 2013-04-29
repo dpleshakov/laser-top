@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+		google.load('visualization', '1.0', {'packages':['corechart']});
+		google.setOnLoadCallback(drawChart);
+
+		function drawChart() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Игрок');
+			data.addColumn('number', 'Рейтинг');
+			{% for stat in stats %}
+			data.addRows(
+				[{{ stat.gamer.name }}, {{ stat.rating }}],
+				);
+			{% endfor %}
+
+			var options = {'title':'Вклад игрока в суммарный рейтинг',
+				'width':400,
+				'height':300};
+
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			chart.draw(data, options);
+		}
+	</script>
+{% endblock %}
+
 {% block main %}
 <div id="info">
 	<table>
@@ -16,6 +42,7 @@
 		</tr>
 	</table>
 </div>
+<div id="chart_div"></div>
 <div id="achives">
 	Достижения:<br>
 	<ul>
