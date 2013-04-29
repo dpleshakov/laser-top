@@ -20,7 +20,7 @@
 	Достижения:<br>
 	<ul>
 		{% for achievement in game.achievements %}
-		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена {{ achievement.gamer.name }}</li>
+		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена <a href="{{ achievement.gamer.keyStr }}">{{ achievement.gamer.name }}</a>)</li>
 		{% endfor %}
 	</ul>
 </div>
