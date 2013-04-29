@@ -90,11 +90,19 @@ def AddGame(date):
 
 ###################################################
 def GetGamer(name, nick):
+	logging.info("Try get gamer by name.")
 	gamer = Gamer.gql("WHERE name = :1", name)
 	if gamer.count() > 0:
-		logging.info("Find gamer with name = '" + name + "'.")
+		logging.info("Find gamer.")
+		return gamer[0]
+	
+	logging.info("Try get gamer by nick.")
+	gamer = Gamer.gql("WHERE nick = :1", nick)
+	if gamer.count() > 1:
+		logging.info("Find gamer.")
 		return gamer[0]
 
+	logging.info("Try add new gamer.")
 	return AddGamer(name, nick)
 
 ###################################################
@@ -135,7 +143,8 @@ def AddStats(stats):
 		game = GetGame(stat[0])
 		gamer = GetGamer(stat[2], stat[3])
 
-		existingStats = Statistic.all().filter('game =', game).filter('gamer =', gamer)
+		# existingStats = Statistic.all().filter('game =', game).filter('gamer =', gamer)
+		existingStats = Statistic.gql("WHERE game = :1 AND gamer = :2", game, gamer)
 		if existingStats.count() == 0:
 			Statistic(
 				game = GetGame(stat[0]),
