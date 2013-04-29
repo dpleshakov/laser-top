@@ -11,9 +11,9 @@
 			data.addColumn('string', 'Игрок');
 			data.addColumn('number', 'Рейтинг');
 			{% for stat in stats %}
-			data.addRows(
-				[{{ stat.gamer.name }}, {{ stat.rating }}],
-				);
+			data.addRow(
+				[{{ stat.gamer.name }}, {{ stat.rating }}]
+			);
 			{% endfor %}
 
 			var options = {'title':'Вклад игрока в суммарный рейтинг',
@@ -22,6 +22,31 @@
 
 			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 			chart.draw(data, options);
+		}
+	</script>
+	<script type='text/javascript'>
+		google.load('visualization', '1', {packages:['table']});
+		google.setOnLoadCallback(drawTable);
+
+		function drawTable() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Имя');
+			data.addColumn('string', 'Цвет');
+			data.addColumn('number', 'Рейтинг');
+			data.addColumn('number', 'Точность');
+			data.addColumn('number', 'Урон');
+			data.addColumn('number', 'Количество смертей');
+			data.addColumn('number', 'Количество ранений');
+			data.addColumn('number', 'Использовано патронов');
+
+			{% for stat in stats %}
+			data.addRow(
+				[{{ stat.gamer.name }}, {{ stat.color }}, {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+			);
+			{% endfor %}
+
+			var table = new google.visualization.Table(document.getElementById('stats'));
+			table.draw(data, {showRowNumber: false});
 		}
 	</script>
 {% endblock %}
@@ -52,7 +77,7 @@
 	</ul>
 </div>
 <div id="stats">
-	<table class="elements-center">
+	<!-- <table class="elements-center">
 		<tr>
 			<th colspan="9">Игровая статистика</th>
 		</tr>
@@ -78,7 +103,7 @@
 			<td>{{ stat.usedCartridge }}</td>
 		</tr>
 		{% endfor %}
-	</table>
+	</table> -->
 </div>
 <div id="plots">
 </div>
