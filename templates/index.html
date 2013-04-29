@@ -71,7 +71,7 @@
 		</tr>
 		{% for stat in statistics %}
 		<tr>
-			<td>{{ stat.game.date }}</td>
+			<td>{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}</td>
 			<td>{{ stat.color }}</td>
 			<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
 			<td>{{ stat.rating }}</td>

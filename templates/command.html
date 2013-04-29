@@ -28,7 +28,7 @@
 	Достижения:<br>
 	<ul>
 		{% for achievement in gamer.achievements %}
-		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена {{ achievement.gamer.name }} {{ achievement.game.date }}</li>
+		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена <a href="/gamer?key={{ achievement.gamer.keyStr }}">{{ achievement.gamer.name }}</a> <a href="/game?key={{ achievement.game.keyStr }}">{{ achievement.game.date }}</a>)</li>
 		{% endfor %}
 	</ul>
 </div>
@@ -38,19 +38,19 @@
 			<th colspan="9">Игровая статистика команды</th>
 		</tr>
 		<tr>
-			<th><a href="?orderBy={{ suffix }}game.date">Дата</a></th>
-			<th><a href="?orderBy={{ suffix }}gamer.name">Игрок</a></th>
-			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
-			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
-			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
-			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
-			<th><a href="?orderBy={{ suffix }}usedCartridge">Использовано патронов</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}game">Дата</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}gamer.name">Игрок</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}color">Цвет</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}rating">Рейтинг</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}accuracy">Точность</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}damage">Урон</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
+			<th><a href="?key={{ command.keyStr }}&orderBy={{ suffix }}usedCartridge">Использовано патронов</a></th>
 		</tr>
 		{% for stat in stats %}
 		<tr>
-			<td>{{ stat.game.date }}</td>
+			<td>{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}</td>
 			<td>{{ stat.color }}</td>
 			<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
 			<td>{{ stat.rating }}</td>
