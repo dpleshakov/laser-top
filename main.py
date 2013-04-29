@@ -115,32 +115,53 @@ def StrToDate(dateAsStr):
 
 ###################################################
 def ParseLine(line):
-	char = '\t'
+	tabulationChar = '\t'
 	logging.info("Line to parse '" + line + "'.")
-	splitedLine = line.split(char)
+	splitedLine = line.split(tabulationChar)
 
-	stat = Statistic(
-			game = GetGame(StrToDate(splitedLine[0])),
-			color = splitedLine[1],
-			gamer = GetGamer(splitedLine[2], splitedLine[3]),
-			rating = float(splitedLine[4]),
-			accuracy = float(splitedLine[5]),
-			damage = int(splitedLine[6]),
-			countOfDeaths = int(splitedLine[7]),
-			countOfInjuries = int(splitedLine[8]),
-			usedCartridge = int(splitedLine[9]),
-			)
-	stat.put()
-	logging.info("Add new statistic, gamer = '" + stat.gamer.name + "', game = '" + str(stat.game.date) + "'.")
+	splitedLine[0] = StrToDate(splitedLine[0])
+	splitedLine[4] = float(splitedLine[4])
+	splitedLine[5] = float(splitedLine[5])
+	splitedLine[6] = int(splitedLine[6])
+	splitedLine[7] = int(splitedLine[7])
+	splitedLine[8] = int(splitedLine[8])
+	splitedLine[9] = int(splitedLine[9])
+
+	return splitedLine
+
+###################################################
+def AddStats(stats):
+	for stat in stats:
+		game = GetGame(stat[0])
+		gamer = GetGamer(stat[2], stat[3])
+
+		existingStats = Statistic.all().filter('game =', game).filter('gamer =', gamer)
+		if existingStats.count() == 0:
+			Statistic(
+				game = GetGame(stat[0]),
+				color = stat[1],
+				gamer = GetGamer(stat[2], stat[3]),
+				rating = stat[4],
+				accuracy = stat[5],
+				damage = stat[6],
+				countOfDeaths = stat[7],
+				countOfInjuries = stat[8],
+				usedCartridge = stat[9],
+			).put()
+			logging.info("Add new Statistic.")
+		else:
+			logging.info("There is Statistic for thie game and gamer.")
 
 ###################################################
 def Parse(text):
-	char = '\n'
+	newLineChar = '\n'
 	text = text.replace('%', '')
 	text = text.replace(',', '.')
-	splitedText = text.split(char)
-	for line in splitedText:
-		ParseLine(line)
+	lines = text.split(newLineChar)
+	stats = []
+	for line in lines:
+		stats.append(ParseLine(line))
+	AddStats(stats)
 
 ###################################################
 def GetOrder(request):
