@@ -120,7 +120,7 @@ def GetGame(date):
 def StrToDate(dateAsStr):
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
 	date = datetime.date(dateAsTime.tm_year, dateAsTime.tm_mon, dateAsTime.tm_mday)
-	logging.info("Convert '" + dateAsTime + "' to '" + str(date) + "'.")
+	logging.info("Convert '" + str(dateAsTime) + "' to '" + str(date) + "'.")
 	return date
 
 ###################################################
