@@ -4,10 +4,19 @@
 	padding-bottom: 7px;
 	border-bottom: 2px solid black;
 	background-color: #339933;
+	color: white;
+}
+
+#header h1{
 	font-weight: bold;
 	font-size: 3ex;
 	text-align: center;
-	color: white;
+}
+
+#header h2{
+	font-weight: bold;
+	font-size: 3ex;
+	text-align: left;
 }
 
 #header a {
