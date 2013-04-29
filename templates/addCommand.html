@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div id="addForm">
+	<p>{{ errors }}</p>
+	Введите название для новой команды:
+	<form acrion="/addCommand" method="post">
+		<!-- <textarea name='stats' id="statsTextArea" onclick="ClearTextarea();">Поле для ввода статистики...</textarea><br> -->
+		<input type="text" name="commandName" value="Название..." />
+		<input type="submit" value="Add" class="elements-center" />
+	</form>
+</div>
+{% endblock %}

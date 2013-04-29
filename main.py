@@ -227,8 +227,6 @@ class AddPage(webapp2.RequestHandler):
 		try:
 			Parse(self.request.get('stats'))
 			self.redirect('/')
-
-			txn.commit();
 		except:
 			template_values = {
 				'errors': unicode(sys.exc_info()[1]),
@@ -306,6 +304,28 @@ class CommandPage(webapp2.RequestHandler):
 		self.response.write(template.render(template_values))
 
 ###################################################
+class AddCommand(webapp2.RequestHandler):
+	def get(self):
+		template = JINJA_ENVIRONMENT.get_template('addCommand.html')
+		self.response.write(template.render())
+
+	def post(self):
+		try:
+			commandName = self.request.get('commandName')
+			existingCommand = Command.gql("WHERE name = :1", commandName)
+			if existingCommand.count() == 0:
+				Command(
+					name = commandName
+				).put()
+			self.redirect('/')
+		except:
+			template_values = {
+				'errors': unicode(sys.exc_info()[1]),
+			}
+
+			template = JINJA_ENVIRONMENT.get_template('addCommand.html')
+			self.response.write(template.render(template_values))
+###################################################
 class EditCommandPage(webapp2.RequestHandler):
 	def get(self):
 		commandKeyStr = self.request.get('key')
@@ -340,5 +360,6 @@ app = webapp2.WSGIApplication(
 	('/game', GamePage),
 	('/command', CommandPage),
 	('/editCommand', EditCommandPage),
+	('addCommand', AddCommand),
 	],
 	debug = True)
