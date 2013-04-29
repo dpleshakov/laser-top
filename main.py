@@ -107,11 +107,13 @@ def GetGamer(name, nick):
 
 ###################################################
 def GetGame(date):
+	logging.info("Try get game by date.")
 	game = Game.gql("WHERE date = :1", date)
 	if game.count() > 0:
-		logging.info("Find game with date = '" + str(date) + "'.")
+		logging.info("Find game.")
 		return game[0]
 
+	logging.info("Try add new game.")
 	return AddGame(date)
 
 ###################################################
