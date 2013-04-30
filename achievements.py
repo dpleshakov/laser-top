@@ -5,8 +5,18 @@ import logging
 from google.appengine.ext import db
 
 ######################################################################################################
+class Image(db.Model):
+	data = db.BlobProperty(default = None)
+	# commands
+	@property
+	def keyStr(self):
+		return str(self.key())
+
+###################################################
 class Command(db.Model):
 	name = db.StringProperty(required = True)
+	logo = db.ReferenceProperty(Image, collection_name = 'commands')
+	# image = db.BlobProperty(default = None)
 	# gamers
 	@property
 	def keyStr(self):
@@ -32,6 +42,7 @@ class Gamer(db.Model):
 ###################################################
 class Game(db.Model):
 	date = db.DateProperty(required = True)
+	wasCalculated = db.BooleanProperty(required = True, default = False)
 	# stats
 	# achievements
 	@property
@@ -103,10 +114,14 @@ def RecalculateAchievements():
 	logging.info("RecalculateAchievements().")
 	allGames = Game.all()
 	for currentGame in allGames:
-		RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
-		RecalculateGameOneAchievement(currentGame, 'accuracy', 'Sniper')
-		RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Kamikaze')
-		RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Tra-ta-ta')
+		if not currentGame.wasCalculated:
+			RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
+			RecalculateGameOneAchievement(currentGame, 'accuracy', 'Sniper')
+			RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Kamikaze')
+			RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Tra-ta-ta')
+			
+			currentGame.wasCalculated = True
+			currentGame.put()
 
 ###################################################
 def GenerateAchievementsTypes():
