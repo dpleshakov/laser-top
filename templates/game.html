@@ -12,12 +12,12 @@
 		data.addColumn('number', 'Рейтинг');
 		{% for stat in stats %}
 		data.addRow(
-			['{{ stat.gamer.name }}', {{ stat.rating }}]
+			['{{ stat.gamer|GamerFormat }}', {{ stat.rating }}]
 		);
 		{% endfor %}
 
 		var options = {'title':'Вклад игрока в суммарный рейтинг',
-			'width':700,
+			'width':900,
 			'height':400};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -41,7 +41,7 @@
 
 		{% for stat in stats %}
 		data.addRow(
-			['{{ stat.gamer.name }}', '{{ stat.color }}', {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
+			['{{ stat.gamer|GamerFormat }}', '{{ stat.color }}', {{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
 		);
 		{% endfor %}
 
@@ -72,7 +72,7 @@
 	Достижения:<br>
 	<ul>
 		{% for achievement in game.achievements %}
-		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}) - <a href="{{ achievement.gamer.keyStr }}">{{ achievement.gamer.name }}</a></li>
+		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}) - <a href="{{ achievement.gamer.keyStr }}">{{ achievement.gamer|GamerFormat }}</a></li>
 		{% endfor %}
 	</ul>
 </div>

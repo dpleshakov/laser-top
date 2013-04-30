@@ -20,7 +20,7 @@
 
 		{% for stat in statistics %}
 		data.addRow(
-			[new Date({{ stat.game.date.year }}, {{ stat.game.date.month }} - 1, {{ stat.game.date.day }}), '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
+			[new Date({{ stat.game.date.year }}, {{ stat.game.date.month }} - 1, {{ stat.game.date.day }}), '{{ stat.color }}', '{{ stat.gamer|GamerFormat }}',
 			{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
 		);
 		{% endfor %}
@@ -51,7 +51,7 @@
 	Игроки:<br>
 	<ul>
 		{% for gamer in command.gamers %}
-		<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer.name }} ({{ gamer.nick }})</a></li>
+		<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer|GamerFormat }}</a></li>
 		{% endfor %}
 	</ul>
 </div>

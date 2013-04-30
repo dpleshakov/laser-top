@@ -14,7 +14,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 def DateFormat(value):
 	return value.strftime("%d.%m.%y")
 
+def GamerFormat(gamer):
+	if not gamer.nick or "None" in gamer.nick:
+		return gamer.name
+	else:
+		return gamer.name + ' "' + gamer.nick + '"'
+
 JINJA_ENVIRONMENT.filters['DateFormat'] = DateFormat
+JINJA_ENVIRONMENT.filters['GamerFormat'] = GamerFormat
 
 ######################################################################################################
 class Command(db.Model):
@@ -44,6 +51,7 @@ class Gamer(db.Model):
 ###################################################
 class Game(db.Model):
 	date = db.DateProperty(required = True)
+	wasCalculated = db.BooleanProperty(required = True, default = False)
 	# stats
 	# achievements
 	@property
@@ -89,7 +97,9 @@ def AddGamer(name, nick):
 ###################################################
 @db.transactional
 def AddGame(date):
-	game = Game(date = date)
+	game = Game(
+		date = date,
+		wasCalculated = False)
 	game.put()
 	logging.info("Add new Game('" + str(date) + "').")
 	return game
