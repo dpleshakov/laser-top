@@ -18,7 +18,7 @@
 		data.addColumn('number', 'Количество ранений');
 		data.addColumn('number', 'Использовано патронов');
 
-		{% for stat in statistics %}
+		{% for stat in stats %}
 		data.addRow(
 			[new Date({{ stat.game.date.year }}, {{ stat.game.date.month }} - 1, {{ stat.game.date.day }}), '{{ stat.color }}', '{{ stat.gamer|GamerFormat }}',
 			{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
@@ -56,12 +56,12 @@
 	</ul>
 </div>
 <div id="achives">
-	<!-- Достижения:<br>
+	Достижения:<br>
 	<ul>
-		{% for achievement in gamer.achievements %}
+		{% for achievement in command.gamers.achievements %}
 		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена <a href="/gamer?key={{ achievement.gamer.keyStr }}">{{ achievement.gamer.name }}</a> <a href="/game?key={{ achievement.game.keyStr }}">{{ achievement.game.date }}</a>)</li>
 		{% endfor %}
-	</ul> -->
+	</ul>
 </div>
 <div id="stats"></div>
 <div id="plots"></div>
