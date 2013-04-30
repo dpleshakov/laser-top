@@ -81,35 +81,5 @@
 		</tr>
 	</table>
 </div>
-<div id="stats">
-	<!-- <table class="elements-center">
-		<tr>
-			<th colspan="9">Игровая статистика за все время</th>
-		</tr>
-		<tr>
-			<th><a href="?orderBy={{ suffix }}game">Дата</a></th>
-			<th><a href="?orderBy={{ suffix }}color">Цвет</a></th>
-			<th><a href="?orderBy={{ suffix }}gamer">Имя игрока</a></th>
-			<th><a href="?orderBy={{ suffix }}rating">Рейтинг</a></th>
-			<th><a href="?orderBy={{ suffix }}accuracy">Точность</a></th>
-			<th><a href="?orderBy={{ suffix }}damage">Урон</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfDeaths">Количество смертей</a></th>
-			<th><a href="?orderBy={{ suffix }}countOfInjuries">Количество ранений</a></th>
-			<th><a href="?orderBy={{ suffix }}usedCartridge">Испольовано патронов</a></th>
-		</tr>
-		{% for stat in statistics %}
-		<tr>
-			<td>{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}</td>
-			<td>{{ stat.color }}</td>
-			<td>{{ stat.gamer.name }} ({{ stat.gamer.nick }})</td>
-			<td>{{ stat.rating }}</td>
-			<td>{{ stat.accuracy }}</td>
-			<td>{{ stat.damage }}</td>
-			<td>{{ stat.countOfDeaths }}</td>
-			<td>{{ stat.countOfInjuries }}</td>
-			<td>{{ stat.usedCartridge }}</td>
-		</tr>
-		{% endfor %}
-	</table> -->
-</div>
+<div id="stats"></div>
 {% endblock %}
