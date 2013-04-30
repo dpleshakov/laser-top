@@ -247,9 +247,16 @@ class GamerPage(webapp2.RequestHandler):
 		logging.info("Find gamer = '" + gamer.name + "'.")
 		stats = gamer.stats.order('game')
 
+		ratings = []
+		for stat in gamer.stats:
+			summaryRatingCurrentGame = sum([currentGameStat.rating for currentGameStat in stat.game.stats])
+			ratings.append( (stat.game.date, stat.rating / summaryRatingCurrentGame) )
+		ratings.sort(key = lambda x: x[0])
+
 		template_values = {
 			'gamer': gamer,
 			'stats': stats,
+			'ratings': ratings,
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('gamer.html')
