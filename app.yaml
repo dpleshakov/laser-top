@@ -13,6 +13,10 @@ handlers:
   script: main.app
   login: admin
 
+- url: /addCommand
+  script: main.app
+  login: admin
+
 - url: /achievements
   script: achievements.app
   login: admin

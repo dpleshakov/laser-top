@@ -265,8 +265,8 @@ class CommandPage(webapp2.RequestHandler):
 	def get(self):
 		commandKeyStr = self.request.get('key')
 		command = db.get(db.Key(encoded = commandKeyStr))
-		stats = Statistic.all().filter("gamer.command = ", command).order("gamer")
-		achievements = Achievement.all().filter("gamer.command = ", command)
+		stats = Statistic.all().filter("gamer.command =", command).order("gamer")
+		achievements = Achievement.all().filter("gamer.command =", command)
 
 		# !!! SORT IT !!!
 
@@ -275,8 +275,7 @@ class CommandPage(webapp2.RequestHandler):
 			'stats': stats,
 			'achievements': achievements,
 		}
-
-		template = JINJA_ENVIRONMENT.get_template('command.html')
+		template = JINJA_ENVIRONMENT.get_template('commandTemplate.html')
 		self.response.write(template.render(template_values))
 
 ###################################################
@@ -320,12 +319,16 @@ class EditCommandPage(webapp2.RequestHandler):
 	def post(self):
 		addedGamerKeyStr = self.request.get('addedGamer')
 		addedGamer = db.get(db.Key(encoded = addedGamerKeyStr))
+		logging.info("Find addedGamer '" + addedGamer.name + "'.")
 
 		commandKeyStr = self.request.get('commandKey')
 		command = db.get(db.Key(encoded = commandKeyStr))
+		logging.info("Find command '" + command.name + "'.")
 
 		addedGamer.command = command
+		logging.info("Add command to gamer: '" + addedGamer.command.name + "'.")
 		addedGamer.put()
+		logging.info("Saved.")
 		self.redirect('/editCommand?key=' + command.keyStr)
 
 ######################################################################################################

@@ -20,20 +20,18 @@
 				</ul>
 			</td>
 		</tr>
-		<form>
+		<form action="/editCommand" method="post">
 			<tr>
 				<td>Добавить игрока:</td>
 				<td>
-					<form action="/editCommand" method="post">
-						<select name="addedGamer" onchange='this.form.submit();'>
-							{% for gamer in gamers %}
-							<option value='{{ gamer.keyStr }}'>{{ gamer.name }} ({{ gamer.nick }})</option>
-							{% endfor %}
-						</select>
-						<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
-					</form>
+					<select name="addedGamer" onchange='this.form.submit();'>
+						{% for gamer in gamers %}
+						<option value='{{ gamer.keyStr }}'>{{ gamer.name }} ({{ gamer.nick }})</option>
+						{% endfor %}
+					</select>
+					<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
 				</td>
-				<td><button>Добавить</button></td>
+				<td><input type="submit" value="Add" /></td>
 			</tr>
 		</form>
 	</table>
