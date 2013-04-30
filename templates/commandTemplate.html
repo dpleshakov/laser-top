@@ -51,14 +51,14 @@
 	Игроки:<br>
 	<ul>
 		{% for gamer in command.gamers %}
-		<li><a href="/user?key={{ gamer.keyStr }}">{{ gamer|GamerFormat }}</a></li>
+		<li><a href="/gamer?key={{ gamer.keyStr }}">{{ gamer|GamerFormat }}</a></li>
 		{% endfor %}
 	</ul>
 </div>
 <div id="achives">
 	Достижения:<br>
 	<ul>
-		{% for achievement in command.gamers.achievements %}
+		{% for achievement in achievements %}
 		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена <a href="/gamer?key={{ achievement.gamer.keyStr }}">{{ achievement.gamer.name }}</a> <a href="/game?key={{ achievement.game.keyStr }}">{{ achievement.game.date }}</a>)</li>
 		{% endfor %}
 	</ul>

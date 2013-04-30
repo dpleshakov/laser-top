@@ -265,8 +265,11 @@ class CommandPage(webapp2.RequestHandler):
 	def get(self):
 		commandKeyStr = self.request.get('key')
 		command = db.get(db.Key(encoded = commandKeyStr))
-		stats = Statistic.all().filter("gamer.command =", command).order("gamer")
-		achievements = Achievement.all().filter("gamer.command =", command)
+		stats = []
+		achievements = []
+		for gamer in command.gamers:
+			stats.extend(gamer.stats)
+			achievements.extend(gamer.achievements)
 
 		# !!! SORT IT !!!
 
