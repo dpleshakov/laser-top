@@ -11,6 +11,12 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
 ######################################################################################################
+def DateFormat(value):
+	return value.strftime("%d.%m.%y")
+
+JINJA_ENVIRONMENT.filters['DateFormat'] = DateFormat
+
+######################################################################################################
 class Command(db.Model):
 	name = db.StringProperty(required = True)
 	# gamers
