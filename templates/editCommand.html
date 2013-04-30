@@ -16,7 +16,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">Изображение:</td>
-			<td><img src="{{ command.image }}" /></td>
+			<td><!-- <img src="{{ command.image }}" /> --></td>
 		</tr>
 		<tr>
 			<td class="text-right">Список игроков:</td>
@@ -28,29 +28,28 @@
 				</ul>
 			</td>
 		</tr>
-		<form action="/editCommand" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
-			<tr>
-				<td>Добавить игрока:</td>
-				<td>
+		<tr>
+			<td>Добавить игрока:</td>
+			<td>
+				<form action="/editCommand" method="post">
+					<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
 					<select name="addedGamer" onchange='this.form.submit();'>
 						{% for gamer in gamers %}
 						<option value='{{ gamer.keyStr }}'>{{ gamer.name }} ({{ gamer.nick }})</option>
 						{% endfor %}
 					</select>
-					
-				</td>
-			</tr>
-			<tr>
-				<td>Загрузить логотип:</td>
-				<td>
-					<input type="file" name="logo" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3"><input type="submit" value="Add" /></td>
-			</tr>
-		</form>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>Загрузить логотип:</td>
+			<td>
+				<form action="/editCommand" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
+					<input type="file" name="logo" onchange="this.form.submit();" />
+				</form>
+			</td>
+		</tr>
 	</table>
 </div>
 {% endblock %}
