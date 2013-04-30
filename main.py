@@ -248,7 +248,7 @@ class GamePage(webapp2.RequestHandler):
 class CommandPage(webapp2.RequestHandler):
 	def get(self):
 		commandKeyStr = self.request.get('key')
-		command = db.get(db.Key(encoded = gameKeyStr))
+		command = db.get(db.Key(encoded = commandKeyStr))
 		stats = Statistic.all().filter("gamer.command = ", command).order("gamer")
 		achievements = Achievement.all().filter("gamer.command = ", command)
 
@@ -298,7 +298,7 @@ class EditCommandPage(webapp2.RequestHandler):
 			'gamers': gamers,
 		}
 
-		template = JINJA_ENVIRONMENT.get_template('command.html')
+		template = JINJA_ENVIRONMENT.get_template('editCommand.html')
 		self.response.write(template.render(template_values))
 
 	def post(self):
@@ -309,7 +309,7 @@ class EditCommandPage(webapp2.RequestHandler):
 		command = db.get(db.Key(encoded = commandKeyStr))
 
 		addedGamer.command = command
-		# put?
+		addedGamer.put()
 		self.redirect('/editCommand?key=' + command.keyStr)
 
 ######################################################################################################
