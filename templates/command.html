@@ -8,7 +8,7 @@
 
 	function drawTable() {
 		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Дата');
+		data.addColumn('date', 'Дата');
 		data.addColumn('string', 'Цвет');
 		data.addColumn('string', 'Игрок');
 		data.addColumn('number', 'Рейтинг');
@@ -20,7 +20,7 @@
 
 		{% for stat in statistics %}
 		data.addRow(
-			['{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}', '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
+			[new Date({{ stat.game.date.year }}, {{ stat.game.date.month }} - 1, {{ stat.game.date.day }}), '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
 			{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
 		);
 		{% endfor %}

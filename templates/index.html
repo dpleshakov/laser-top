@@ -4,11 +4,17 @@
 <script>
 	function ChangeDisplay(element) {
 		if (element.style.display == "none") {
-			element.style.display = ''
+			element.style.display = '';
 		}
 		else {
-			element.style.display = 'none'
+			element.style.display = 'none';
 		}
+	}
+
+	onload = function() {
+		document.getElementById('gamersList').style.display = 'none';
+		document.getElementById('commandsList').style.display = 'none';
+		document.getElementById('gamesList').style.display = 'none';
 	}
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -18,7 +24,7 @@
 
 		function drawTable() {
 			var data = new google.visualization.DataTable();
-			data.addColumn('string', 'Дата');
+			data.addColumn('date', 'Дата');
 			data.addColumn('string', 'Цвет');
 			data.addColumn('string', 'Игрок');
 			data.addColumn('number', 'Рейтинг');
@@ -30,7 +36,7 @@
 
 			{% for stat in statistics %}
 			data.addRow(
-				['{{ stat.game.date.day }}.{{ stat.game.date.month }}.{{ stat.game.date.year }}', '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
+				[new Date({{ stat.game.date.year }}, {{ stat.game.date.month }} - 1, {{ stat.game.date.day }}), '{{ stat.color }}', '{{ stat.gamer.name }} "{{ stat.gamer.nick }}"',
 				{{ stat.rating }}, {{ stat.accuracy }}, {{ stat.damage }}, {{ stat.countOfDeaths }}, {{ stat.countOfInjuries }}, {{ stat.usedCartridge }}]
 			);
 			{% endfor %}
@@ -73,7 +79,7 @@
 					Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
 					<ul id="gamesList">
 						{% for game in games %}
-						<li>Игра {{ game.date.day }}.{{ game.date.month }}.{{ game.date.year }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
+						<li>Игра {{ game.date|DateFormat }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
 						{% endfor %}
 					</ul>
 				</div>
