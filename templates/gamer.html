@@ -58,7 +58,7 @@
 	Достижения:<br>
 	<ul>
 		{% for achievement in gamer.achievements %}
-		<li>{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }}, получена <a href="/game?key={{ achievement.game.keyStr }}">{{ achievement.game.date }}</a>)</li>
+		<li title="Заработана на игре {{ achievement.game.date|DateFormat }}"><a href="/game?key={{ achievement.game.keyStr }}">{{ achievement.achievementType.name }} ({{ achievement.achievementType.level }})</a></li>
 		{% endfor %}
 	</ul>
 </div>
