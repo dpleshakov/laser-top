@@ -112,43 +112,52 @@ def RecalculateGameOneAchievement(game, statisticName, achievementName):
 ###################################################
 def RecalculateAchievements():
 	logging.info("RecalculateAchievements().")
+	
+	# Recalculate ordinary achievements
 	allGames = Game.all()
 	for currentGame in allGames:
 		if not currentGame.wasCalculated:
-			RecalculateGameOneAchievement(currentGame, 'rating', 'Warrior')
-			RecalculateGameOneAchievement(currentGame, 'accuracy', 'Sniper')
-			RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Kamikaze')
-			RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Tra-ta-ta')
+			RecalculateGameOneAchievement(currentGame, 'rating', 'Воин')
+			RecalculateGameOneAchievement(currentGame, 'accuracy', 'Снайпер')
+			RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Камикадзе')
+			RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Тра-та-та')
 			
 			currentGame.wasCalculated = True
 			currentGame.put()
 
+	# # Recalculate legendary achievements
+	# allGamers = Gamer.all()
+	# for currentGamer in allGamers:
+	# 	achievementsTypes = [currentAchievement.achievementType for currentAchievement in currentGamer.achievements]
+
 ###################################################
 def GenerateAchievementsTypes():
 	logging.info("Initially creating of achievement types.")
-	AchievementType(name = "Warrior", level = "Gold").put()
-	AchievementType(name = "Warrior", level = "Silver").put()
-	AchievementType(name = "Warrior", level = "Bronze").put()
+	# Ordinary
+	AchievementType(name = "Воин", level = "Золото").put()
+	AchievementType(name = "Воин", level = "Серебро").put()
+	AchievementType(name = "Воин", level = "Бронза").put()
 
-	AchievementType(name = "Sniper", level = "Gold").put()
-	AchievementType(name = "Sniper", level = "Silver").put()
-	AchievementType(name = "Sniper", level = "Bronze").put()
+	AchievementType(name = "Снайпер", level = "Золото").put()
+	AchievementType(name = "Снайпер", level = "Серебро").put()
+	AchievementType(name = "Снайпер", level = "Бронза").put()
 
-	AchievementType(name = "Kamikaze", level = "Gold").put()
-	AchievementType(name = "Kamikaze", level = "Silver").put()
-	AchievementType(name = "Kamikaze", level = "Bronze").put()
+	AchievementType(name = "Камикадзе", level = "Золото").put()
+	AchievementType(name = "Камикадзе", level = "Серебро").put()
+	AchievementType(name = "Камикадзе", level = "Бронза").put()
 
-	AchievementType(name = "Tra-ta-ta", level = "Gold").put()
-	AchievementType(name = "Tra-ta-ta", level = "Silver").put()
-	AchievementType(name = "Tra-ta-ta", level = "Bronze").put()
+	AchievementType(name = "Тра-та-та", level = "Золото").put()
+	AchievementType(name = "Тра-та-та", level = "Серебро").put()
+	AchievementType(name = "Тра-та-та", level = "Бронза").put()
 
-	# AchievementType(name = "Hero", level = "Gold").put()
-	# AchievementType(name = "Hero", level = "Silver").put()
-	# AchievementType(name = "Hero", level = "Bronze").put()
+	# # Legendary
+	# AchievementType(name = "Герой", level = "Gold").put()
+	# AchievementType(name = "Герой", level = "Silver").put()
+	# AchievementType(name = "Герой", level = "Bronze").put()
 
-	# AchievementType(name = "Collector", level = "Gold").put()
-	# AchievementType(name = "Collector", level = "Silver").put()
-	# AchievementType(name = "Collector", level = "Bronze").put()
+	# AchievementType(name = "Коллекционер", level = "Gold").put()
+	# AchievementType(name = "Коллекционер", level = "Silver").put()
+	# AchievementType(name = "Коллекционер", level = "Bronze").put()
 
 ######################################################################################################
 try:
