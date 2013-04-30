@@ -9,7 +9,8 @@ from google.appengine.ext import db
 from google.appengine.api import images
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
+	loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates'))
+)
 
 ######################################################################################################
 def DateFormat(value):
