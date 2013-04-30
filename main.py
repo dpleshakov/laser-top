@@ -6,6 +6,7 @@ import sys
 import logging
 
 from google.appengine.ext import db
+from google.appengine.api import images
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -24,8 +25,18 @@ JINJA_ENVIRONMENT.filters['DateFormat'] = DateFormat
 JINJA_ENVIRONMENT.filters['GamerFormat'] = GamerFormat
 
 ######################################################################################################
+class Image(db.Model):
+	data = db.BlobProperty(default = None)
+	# commands
+	@property
+	def keyStr(self):
+		return str(self.key())
+
+###################################################
 class Command(db.Model):
 	name = db.StringProperty(required = True)
+	logo = db.ReferenceProperty(Image, collection_name = 'commands')
+	# image = db.BlobProperty(default = None)
 	# gamers
 	@property
 	def keyStr(self):
@@ -320,19 +331,31 @@ class EditCommandPage(webapp2.RequestHandler):
 		self.response.write(template.render(template_values))
 
 	def post(self):
-		addedGamerKeyStr = self.request.get('addedGamer')
-		addedGamer = db.get(db.Key(encoded = addedGamerKeyStr))
-		logging.info("Find addedGamer '" + addedGamer.name + "'.")
-
 		commandKeyStr = self.request.get('commandKey')
 		command = db.get(db.Key(encoded = commandKeyStr))
-		logging.info("Find command '" + command.name + "'.")
 
-		addedGamer.command = command
-		logging.info("Add command to gamer: '" + addedGamer.command.name + "'.")
-		addedGamer.put()
-		logging.info("Saved.")
+		addedGamerKeyStr = self.request.get('addedGamer')
+		if addedGamerKeyStr:
+			addedGamer = db.get(db.Key(encoded = addedGamerKeyStr))
+			addedGamer.command = command
+			addedGamer.put()
+
+		logo = self.request.get("logo")
+		if logo:
+			logo = Image(data = images.resize(logo, 20, 20))
+			logo.put()
+
+			command.logo = logo
+			command.put()
+		
 		self.redirect('/editCommand?key=' + command.keyStr)
+
+###################################################
+class ImageHandler(webapp2.RequestHandler):
+	def get(self, imageKey):
+		image = Image.get(imageKey)
+		self.response.headers['Content-Type'] = 'image/png'
+		self.response.out.write(image.data)
 
 ######################################################################################################
 app = webapp2.WSGIApplication(
@@ -343,5 +366,6 @@ app = webapp2.WSGIApplication(
 	('/command', CommandPage),
 	('/editCommand', EditCommandPage),
 	('/addCommand', AddCommand),
+	('/images/(.*)', ImageHandler),
 	],
 	debug = True)

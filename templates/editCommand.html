@@ -11,6 +11,14 @@
 			<td>{{ command.name }}</td>
 		</tr>
 		<tr>
+			<td class="text-right">Логотип (отображается рядом с именем игрока):</td>
+			<td><img src="/images/{{ command.logo.keyStr }}" /></td>
+		</tr>
+		<tr>
+			<td class="text-right">Изображение:</td>
+			<td><img src="{{ command.image }}" /></td>
+		</tr>
+		<tr>
 			<td class="text-right">Список игроков:</td>
 			<td>
 				<ul>
@@ -20,7 +28,8 @@
 				</ul>
 			</td>
 		</tr>
-		<form action="/editCommand" method="post">
+		<form action="/editCommand" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
 			<tr>
 				<td>Добавить игрока:</td>
 				<td>
@@ -29,9 +38,17 @@
 						<option value='{{ gamer.keyStr }}'>{{ gamer.name }} ({{ gamer.nick }})</option>
 						{% endfor %}
 					</select>
-					<input type="hidden" name="commandKey" value='{{ command.keyStr }}' />
+					
 				</td>
-				<td><input type="submit" value="Add" /></td>
+			</tr>
+			<tr>
+				<td>Загрузить логотип:</td>
+				<td>
+					<input type="file" name="logo" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3"><input type="submit" value="Add" /></td>
 			</tr>
 		</form>
 	</table>
