@@ -1,81 +1,83 @@
+# -*- coding: utf-8 -*-
+
 import datetime, time
 import sys
 import logging
 
 from google.appengine.ext import db
 
-######################################################################################################
-class Image(db.Model):
-	data = db.BlobProperty(default = None)
-	# commands
-	@property
-	def keyStr(self):
-		return str(self.key())
+# ######################################################################################################
+# class Image(db.Model):
+# 	data = db.BlobProperty(default = None)
+# 	# commands
+# 	@property
+# 	def keyStr(self):
+# 		return str(self.key())
 
-###################################################
-class Command(db.Model):
-	name = db.StringProperty(required = True)
-	logo = db.ReferenceProperty(Image, collection_name = 'commands')
-	# image = db.BlobProperty(default = None)
-	# gamers
-	@property
-	def keyStr(self):
-		return str(self.key())
-	@property
-	def gamersCount(self):
-		return self.gamers.count()
+# ###################################################
+# class Command(db.Model):
+# 	name = db.StringProperty(required = True)
+# 	logo = db.ReferenceProperty(Image, collection_name = 'commands')
+# 	# image = db.BlobProperty(default = None)
+# 	# gamers
+# 	@property
+# 	def keyStr(self):
+# 		return str(self.key())
+# 	@property
+# 	def gamersCount(self):
+# 		return self.gamers.count()
 
-###################################################
-class Gamer(db.Model):
-	name = db.StringProperty(required = True)
-	nick = db.StringProperty()
-	command = db.ReferenceProperty(Command, collection_name = 'gamers')
-	# stats
-	# achievements
-	@property
-	def keyStr(self):
-		return str(self.key())
-	@property
-	def gamesCount(self):
-		return self.stats.count()
+# ###################################################
+# class Gamer(db.Model):
+# 	name = db.StringProperty(required = True)
+# 	nick = db.StringProperty()
+# 	command = db.ReferenceProperty(Command, collection_name = 'gamers')
+# 	# stats
+# 	# achievements
+# 	@property
+# 	def keyStr(self):
+# 		return str(self.key())
+# 	@property
+# 	def gamesCount(self):
+# 		return self.stats.count()
 
-###################################################
-class Game(db.Model):
-	date = db.DateProperty(required = True)
-	wasCalculated = db.BooleanProperty(required = True, default = False)
-	# stats
-	# achievements
-	@property
-	def keyStr(self):
-		return str(self.key())
-	@property
-	def gamersCount(self):
-		return self.stats.count()
+# ###################################################
+# class Game(db.Model):
+# 	date = db.DateProperty(required = True)
+# 	wasCalculated = db.BooleanProperty(required = True, default = False)
+# 	# stats
+# 	# achievements
+# 	@property
+# 	def keyStr(self):
+# 		return str(self.key())
+# 	@property
+# 	def gamersCount(self):
+# 		return self.stats.count()
 
-###################################################
-class Statistic(db.Model):
-	game = db.ReferenceProperty(Game, collection_name = 'stats', required = True)
-	color = db.StringProperty(required = True)
-	gamer = db.ReferenceProperty(Gamer, collection_name = 'stats', required = True)
-	rating = db.FloatProperty(required = True)
-	accuracy = db.FloatProperty(required = True)
-	damage = db.IntegerProperty(required = True)
-	countOfDeaths = db.IntegerProperty(required = True)
-	countOfInjuries = db.IntegerProperty(required = True)
-	usedCartridge = db.IntegerProperty(required = True)
+# ###################################################
+# class Statistic(db.Model):
+# 	game = db.ReferenceProperty(Game, collection_name = 'stats', required = True)
+# 	color = db.StringProperty(required = True)
+# 	gamer = db.ReferenceProperty(Gamer, collection_name = 'stats', required = True)
+# 	rating = db.FloatProperty(required = True)
+# 	accuracy = db.FloatProperty(required = True)
+# 	damage = db.IntegerProperty(required = True)
+# 	countOfDeaths = db.IntegerProperty(required = True)
+# 	countOfInjuries = db.IntegerProperty(required = True)
+# 	usedCartridge = db.IntegerProperty(required = True)
 
-###################################################
-class AchievementType(db.Model):
-	name = db.StringProperty(required = True)
-	level = db.StringProperty(required = True)
-	image = db.LinkProperty(default = None)
-	# achievements
+# ###################################################
+# class AchievementType(db.Model):
+# 	name = db.StringProperty(required = True)
+# 	level = db.StringProperty(required = True)
+# 	image = db.LinkProperty(default = None)
+# 	# achievements
 
-###################################################
-class Achievement(db.Model):
-	achievementType = db.ReferenceProperty(AchievementType, collection_name = 'achievements', required = True)
-	game = db.ReferenceProperty(Game, collection_name = 'achievements', required = True)
-	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
+# ###################################################
+# class Achievement(db.Model):
+# 	achievementType = db.ReferenceProperty(AchievementType, collection_name = 'achievements', required = True)
+# 	game = db.ReferenceProperty(Game, collection_name = 'achievements', required = True)
+# 	gamer = db.ReferenceProperty(Gamer, collection_name = 'achievements', required = True)
 
 ######################################################################################################
 def GetAchievementType(name, level):
@@ -120,7 +122,7 @@ def RecalculateAchievements():
 			RecalculateGameOneAchievement(currentGame, 'rating', 'Воин')
 			RecalculateGameOneAchievement(currentGame, 'accuracy', 'Снайпер')
 			RecalculateGameOneAchievement(currentGame, 'countOfDeaths', 'Камикадзе')
-			RecalculateGameOneAchievement(currentGame, 'usedCartridge', 'Тра-та-та')
+			RecalculateGameOneAchievement(currentGame, 'used', 'Тра-та-та')
 			
 			currentGame.wasCalculated = True
 			currentGame.put()
@@ -160,9 +162,3 @@ def GenerateAchievementsTypes():
 	# AchievementType(name = "Коллекционер", level = "Bronze").put()
 
 ######################################################################################################
-try:
-	if not AchievementType.all().count() > 0:
-		GenerateAchievementsTypes()
-	RecalculateAchievements()
-except:
-	logging.error("Error in RecalculateAchievements: " + str(sys.exc_info()[1]))

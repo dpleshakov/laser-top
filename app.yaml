@@ -5,20 +5,12 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /add
+- url: /(add|editCommand|addCommand)
   script: main.app
   login: admin
 
-- url: /editCommand
+- url: /achievements/(recalculate|initialization)
   script: main.app
-  login: admin
-
-- url: /addCommand
-  script: main.app
-  login: admin
-
-- url: /achievements
-  script: achievements.app
   login: admin
 
 - url: /stylesheets

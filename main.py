@@ -1,10 +1,14 @@
-import webapp2
-import jinja2
+# -*- coding: utf-8 -*-
+
 import os
 import datetime, time
 import sys
 import logging
 
+import achievements
+
+import webapp2
+import jinja2
 from google.appengine.ext import db
 from google.appengine.api import images
 
@@ -126,7 +130,7 @@ def GetGamer(name, nick):
 	
 	logging.info("Try get gamer by nick.")
 	gamer = Gamer.gql("WHERE nick = :1", nick)
-	if gamer.count() > 1:
+	if gamer.count() > 1 and not nick == 'None':
 		logging.info("Find gamer.")
 		return gamer[0]
 
@@ -359,6 +363,23 @@ class EditCommandPage(webapp2.RequestHandler):
 		self.redirect('/editCommand?key=' + command.keyStr)
 
 ###################################################
+class RecalculateAchievementsPage(webapp2.RequestHandler):
+	def get(self):
+		try:
+			RecalculateAchievements()
+		except:
+			logging.error("Error in RecalculateAchievements: " + str(sys.exc_info()[1]))
+
+		self.redirect('/')
+
+###################################################
+class InitializationAchievementsPage(webapp2.RequestHandler):
+	def get(self):
+		GenerateAchievementsTypes()
+
+		self.redirect('/')
+
+###################################################
 class ImageHandler(webapp2.RequestHandler):
 	def get(self, imageKey):
 		image = Image.get(imageKey)
@@ -375,5 +396,7 @@ app = webapp2.WSGIApplication(
 	('/editCommand', EditCommandPage),
 	('/addCommand', AddCommand),
 	('/images/(.*)', ImageHandler),
+	('/achievements/recalculate', RecalculateAchievementsPage),
+	('/achievements/initialization', InitializationAchievementsPage),
 	],
 	debug = True)
