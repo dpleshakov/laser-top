@@ -17,6 +17,15 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 )
 
 ######################################################################################################
+def LoggingCallFunction(func):
+	def wrapper(*args, **kwargs):
+		logging.debug(func.__name__ + ":\tcall" + str(args) + str(kwargs))
+		result = func(*args, **kwargs)
+		logging.debug(func.__name__ + ":\treturn " + str(result))
+		return result
+	return wrapper
+
+######################################################################################################
 def DateFormat(value):
 	return value.strftime("%d.%m.%y")
 
@@ -104,6 +113,7 @@ class Achievement(db.Model):
 
 ######################################################################################################
 @db.transactional
+@LoggingCallFunction
 def AddGamer(name, nick):
 	gamer = Gamer(name = name, nick = nick)
 	gamer.put()
@@ -112,6 +122,7 @@ def AddGamer(name, nick):
 
 ###################################################
 @db.transactional
+@LoggingCallFunction
 def AddGame(date):
 	game = Game(
 		date = date,
@@ -121,6 +132,7 @@ def AddGame(date):
 	return game
 
 ###################################################
+@LoggingCallFunction
 def GetGamer(name, nick):
 	logging.info("Try get gamer by name.")
 	gamer = Gamer.gql("WHERE name = :1", name)
@@ -138,6 +150,7 @@ def GetGamer(name, nick):
 	return AddGamer(name, nick)
 
 ###################################################
+@LoggingCallFunction
 def GetGame(date):
 	logging.info("Try get game by date.")
 	game = Game.gql("WHERE date = :1", date)
@@ -149,6 +162,7 @@ def GetGame(date):
 	return AddGame(date)
 
 ###################################################
+@LoggingCallFunction
 def StrToDate(dateAsStr):
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
 	date = datetime.date(dateAsTime.tm_year, dateAsTime.tm_mon, dateAsTime.tm_mday)
@@ -156,6 +170,7 @@ def StrToDate(dateAsStr):
 	return date
 
 ###################################################
+@LoggingCallFunction
 def ParseLine(line):
 	tabulationChar = '\t'
 	logging.info("Line to parse '" + line + "'.")
@@ -172,6 +187,7 @@ def ParseLine(line):
 	return splitedLine
 
 ###################################################
+@LoggingCallFunction
 def AddStats(stats):
 	for stat in stats:
 		game = GetGame(stat[0])
@@ -196,6 +212,7 @@ def AddStats(stats):
 			logging.info("There is Statistic for thie game and gamer.")
 
 ###################################################
+@LoggingCallFunction
 def Parse(text):
 	newLineChar = '\n'
 	text = text.replace('%', '')
