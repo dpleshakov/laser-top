@@ -5,6 +5,7 @@ import datetime, time
 import sys
 import logging
 
+import loggingWrapper
 import achievements
 
 import webapp2
@@ -15,15 +16,6 @@ from google.appengine.api import images
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates'))
 )
-
-######################################################################################################
-def LoggingCallFunction(func):
-	def wrapper(*args, **kwargs):
-		logging.debug(func.__name__ + ":\tcall" + str(args) + str(kwargs))
-		result = func(*args, **kwargs)
-		logging.debug(func.__name__ + ":\treturn " + str(result))
-		return result
-	return wrapper
 
 ######################################################################################################
 def DateFormat(value):
@@ -113,7 +105,7 @@ class Achievement(db.Model):
 
 ######################################################################################################
 @db.transactional
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def AddGamer(name, nick):
 	gamer = Gamer(name = name, nick = nick)
 	gamer.put()
@@ -122,7 +114,7 @@ def AddGamer(name, nick):
 
 ###################################################
 @db.transactional
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def AddGame(date):
 	game = Game(
 		date = date,
@@ -132,7 +124,7 @@ def AddGame(date):
 	return game
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def GetGamer(name, nick):
 	logging.info("Try get gamer by name.")
 	gamer = Gamer.gql("WHERE name = :1", name)
@@ -150,7 +142,7 @@ def GetGamer(name, nick):
 	return AddGamer(name, nick)
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def GetGame(date):
 	logging.info("Try get game by date.")
 	game = Game.gql("WHERE date = :1", date)
@@ -162,7 +154,7 @@ def GetGame(date):
 	return AddGame(date)
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def StrToDate(dateAsStr):
 	dateAsTime = time.strptime(dateAsStr, "%d.%m.%Y")
 	date = datetime.date(dateAsTime.tm_year, dateAsTime.tm_mon, dateAsTime.tm_mday)
@@ -170,7 +162,7 @@ def StrToDate(dateAsStr):
 	return date
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def ParseLine(line):
 	tabulationChar = '\t'
 	logging.info("Line to parse '" + line + "'.")
@@ -187,7 +179,7 @@ def ParseLine(line):
 	return splitedLine
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def AddStats(stats):
 	for stat in stats:
 		game = GetGame(stat[0])
@@ -212,7 +204,7 @@ def AddStats(stats):
 			logging.info("There is Statistic for thie game and gamer.")
 
 ###################################################
-@LoggingCallFunction
+@loggingWrapper.CallFunction
 def Parse(text):
 	newLineChar = '\n'
 	text = text.replace('%', '')
@@ -383,7 +375,7 @@ class EditCommandPage(webapp2.RequestHandler):
 class RecalculateAchievementsPage(webapp2.RequestHandler):
 	def get(self):
 		try:
-			RecalculateAchievements()
+			achievements.RecalculateAchievements()
 		except:
 			logging.error("Error in RecalculateAchievements: " + str(sys.exc_info()[1]))
 
@@ -392,7 +384,7 @@ class RecalculateAchievementsPage(webapp2.RequestHandler):
 ###################################################
 class InitializationAchievementsPage(webapp2.RequestHandler):
 	def get(self):
-		GenerateAchievementsTypes()
+		achievements.GenerateAchievementsTypes()
 
 		self.redirect('/')
 
