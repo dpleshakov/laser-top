@@ -8,13 +8,24 @@
 </head>
 <body>
 	<div id="header">
-		<h2><a href="/">На главную</a></h2>
-		<h1>Портал статистики <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></h1>
+		<div id="header-main-page-return"><a href="/">&#8678;На главную</a></div>
+		<div id="header-center">Портал статистики игр <a href="http://vk.com/lasertagfundays">"Lasertag fun days"</a></div>
 	</div>
 	<div id="main">
 		{% block main %}
 		{% endblock %}
 	</div>
-	<footer>&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a></footer>
+	<div id="information">
+		<a href="#">Справка</a>
+		&lrm;
+		<a href="#">Условия использования</a>
+		&lrm;
+		<a href="#">Информация о портале</a>
+		&lrm;
+	</div>
+	<div id="footer">
+		&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a><br />
+		Source code on <a href="https://github.com/dpleshakov/laser-top">GitHub</a>
+	</div>
 </body>
 </html>
