@@ -1,7 +1,7 @@
 /****************************************************/
 #header, #footer {
 	color: white;
-	background: url(camouflage.png) repeat-x #339933;
+	background: url(/static/camouflage.png) repeat-x #339933;
 	vertical-align: middle;
 	text-shadow: 1px 1px 3px black, 0 0 1em red; /* Параметры тени */
 }
@@ -16,8 +16,8 @@
 
 #header {
 	background-position: 18% 40%;
-	padding-top: 9px;
-	padding-bottom: 7px;
+	padding-top: 18px;
+	padding-bottom: 16px;
 	border-bottom: 2px solid black;
 }
 
@@ -48,6 +48,8 @@
 /****************************************************/
 #information {
 	text-align: right;
+	margin-top: 25px;
+	margin-bottom: 20px;
 }
 
 /****************************************************/
