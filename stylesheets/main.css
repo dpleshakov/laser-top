@@ -72,23 +72,6 @@ table{
 	margin-top: 20px;
 }
 
-#stats table, #stats th, #stats td {
-	border: 1px solid black;
-	padding: 5px 5px 5px 5px;
-}
-
-#stats th {
-	background-color: #D0D0D0;
-}
-
-#stats a {
-	color: black;
-}
-
-#stats a:hover {
-	text-decoration: none;
-}
-
 /****************************************************/
 #addForm textarea {
 	width: 100%;
