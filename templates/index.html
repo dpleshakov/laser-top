@@ -13,8 +13,8 @@
 
 	onload = function() {
 		document.getElementById('gamersList').style.display = 'none';
-		document.getElementById('commandsList').style.display = 'none';
-		document.getElementById('gamesList').style.display = 'none';
+		// document.getElementById('commandsList').style.display = 'none';
+		// document.getElementById('gamesList').style.display = 'none';
 	}
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -41,7 +41,7 @@
 			);
 			{% endfor %}
 
-			var table = new google.visualization.Table(document.getElementById('stats'));
+			var table = new google.visualization.Table(document.getElementById('stats-table-div'));
 			table.draw(data, {showRowNumber: false});
 		}
 	</script>
@@ -84,5 +84,8 @@
 		</tr>
 	</table>
 </div>
-<div id="stats"></div>
+<div id="stats">
+	Сводная статистика за все время <a href="#" onclick="ChangeDisplay(document.getElementById('stats-table-div')); return false;">(скрыть/показать)</a>:<br>
+	<div id="stats-table-div"></div>
+</div>
 {% endblock %}
