@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+import logging
+import sys
+
+import loggingWrapper
+import achievements
 
 import webapp2
 import jinja2
@@ -102,17 +107,107 @@ class AdminPage(webapp2.RequestHandler):
 		template = JINJA_ENVIRONMENT.get_template('adminPage.html')
 		self.response.write(template.render())
 
+###################################################
+class AddPage(webapp2.RequestHandler):
+	def get(self):
+		template = JINJA_ENVIRONMENT.get_template('add.html')
+		self.response.write(template.render())
+
+	def post(self):
+		try:
+			Parse(self.request.get('stats'))
+			self.redirect('/')
+		except:
+			template_values = {
+				'errors': unicode(sys.exc_info()[1]),
+			}
+
+			template = JINJA_ENVIRONMENT.get_template('add.html')
+			self.response.write(template.render(template_values))
+
+###################################################
+class AddCommand(webapp2.RequestHandler):
+	def get(self):
+		template = JINJA_ENVIRONMENT.get_template('addCommand.html')
+		self.response.write(template.render())
+
+	def post(self):
+		try:
+			commandName = self.request.get('commandName')
+			existingCommand = Command.gql("WHERE name = :1", commandName)
+			if existingCommand.count() == 0:
+				Command(
+					name = commandName
+				).put()
+			self.redirect('/')
+		except:
+			template_values = {
+				'errors': unicode(sys.exc_info()[1]),
+			}
+
+			template = JINJA_ENVIRONMENT.get_template('addCommand.html')
+			self.response.write(template.render(template_values))
+
+###################################################
+class EditCommandPage(webapp2.RequestHandler):
+	def get(self):
+		commandKeyStr = self.request.get('key')
+		command = db.get(db.Key(encoded = commandKeyStr))
+
+		gamers = Gamer.all().filter('command != ', command)
+
+		template_values = {
+			'command': command,
+			'gamers': gamers,
+		}
+
+		template = JINJA_ENVIRONMENT.get_template('editCommand.html')
+		self.response.write(template.render(template_values))
+
+	def post(self):
+		commandKeyStr = self.request.get('commandKey')
+		command = db.get(db.Key(encoded = commandKeyStr))
+
+		addedGamerKeyStr = self.request.get('addedGamer')
+		if addedGamerKeyStr:
+			addedGamer = db.get(db.Key(encoded = addedGamerKeyStr))
+			addedGamer.command = command
+			addedGamer.put()
+
+		logo = self.request.get("logo")
+		if logo:
+			logo = Image(data = images.resize(logo, 20, 20))
+			logo.put()
+
+			command.logo = logo
+			command.put()
+		
+		self.redirect('/editCommand?key=' + command.keyStr)
+
+###################################################
+class RecalculateAchievementsPage(webapp2.RequestHandler):
+	def get(self):
+		try:
+			achievements.RecalculateAchievements()
+		except:
+			logging.error("Error in RecalculateAchievements: " + str(sys.exc_info()[1]))
+
+		self.redirect('/admin')
+
+###################################################
+class InitializationAchievementsPage(webapp2.RequestHandler):
+	def get(self):
+		achievements.GenerateAchievementsTypes()
+
+		self.redirect('/admin')
+
 ######################################################################################################
 app = webapp2.WSGIApplication(
 	[('/admin', AdminPage),
-	# ('/add', AddPage),
-	# ('/gamer', GamerPage),
-	# ('/game', GamePage),
-	# ('/command', CommandPage),
-	# ('/editCommand', EditCommandPage),
-	# ('/addCommand', AddCommand),
-	# ('/images/(.*)', ImageHandler),
-	# ('/achievements/recalculate', RecalculateAchievementsPage),
-	# ('/achievements/initialization', InitializationAchievementsPage),
+	('/admin/add', AddPage),
+	('/admin/editCommand', EditCommandPage),
+	('/admin/addCommand', AddCommand),
+	('/admin/recalculateAchievements', RecalculateAchievementsPage),
+	('/admin/initializationAchievements', InitializationAchievementsPage),
 	],
 	debug = True)
