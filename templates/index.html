@@ -50,7 +50,12 @@
 		<li><a href="#tabs-5">Статистика</a></li>
 	</ul>
 	<div id="tabs-1">
-		Будут новости.
+		{% for currentNews in news %}
+		<p>{{ currentNews.title }}</p>
+		<p>{{ currentNews.body }}</p>
+		<p>{{ currentNews.date|DateFormat }}</p>
+		<hr>
+		{% endfor %}
 	</div>
 	<div id="tabs-2">
 		<ul id="gamesList">
