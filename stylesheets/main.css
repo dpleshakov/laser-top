@@ -1,16 +1,44 @@
 /****************************************************/
-#header, #footer {
+#content {
+	position: relative;
+	min-height: 100%;
+	width: 100%;
+}
+
+#header {
+	position: relative;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+
+#main {
+	position: relative;
+	top: 0px;
+	width: 100%;
+	padding-bottom: 125px;
+}
+
+#footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+/****************************************************/
+#header, #about {
 	color: white;
 	background: url(/static/camouflage.png) repeat-x #339933;
 	vertical-align: middle;
 	text-shadow: 1px 1px 3px black, 0 0 1em red; /* Параметры тени */
 }
 
-#footer a, #header a {
+#about a, #header a {
 	color: white;
 }
 
-#footer a:hover, #header a:hover {
+#about a:hover, #header a:hover {
 	text-decoration: none;
 }
 
@@ -23,38 +51,36 @@
 
 #header-main-page-return {
 	text-align: left;
-	font-size: 2.5ex;
+	font-size: 2.2ex;
 	float: left;
 }
 
 #header-center {
 	text-align: center;
 	font-weight: bold;
-	font-size: 3ex;
+	font-size: 2.8ex;
 }
 
-#footer {
+#about {
 	background-position: 35% 82%;
 	border-top: 2px solid black;
 	margin-top: 10px;
 	padding-top: 7px;
 	padding-bottom: 9px;
-	position: absolute;
-	width: 99%;
-	font-size: 2.5ex;
+	font-size: 2.2ex;
 	text-align: center;
 }
 
 /****************************************************/
-#information {
+#main {
+	font-size: 12px;
+}
+
+#links {
 	text-align: right;
 	margin-top: 25px;
 	margin-bottom: 20px;
-}
-
-/****************************************************/
-#main {
-	min-height: 91%;
+	padding-right: 10px;
 }
 
 /****************************************************/

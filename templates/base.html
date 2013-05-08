@@ -2,32 +2,36 @@
 <head>
 	<meta charset="utf-8">
 	<title>Laser-TOP</title>
-	<link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
 	{% block head %}
 	{% endblock %}
+	<link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
 </head>
 <body>
-	<div id="header">
-		<div id="header-main-page-return"><a href="/">&#8678;На главную</a></div>
-		<div id="header-center">Портал статистики игр &laquo;<a href="http://vk.com/lasertagfundays">Lasertag fun days</a>&raquo;</div>
-	</div>
-	<div id="main">
-		{% block main %}
-		{% endblock %}
-	</div>
-	<div id="information">
-		<a href="#">Справка</a>
-		&lrm;
-		<a href="#">Условия использования</a>
-		&lrm;
-		<a href="#">Информация о портале</a>
-		&lrm;
-		<a href="/admin">Администрирование</a>
-		&lrm;
-	</div>
-	<div id="footer">
-		&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a><br />
-		Source code on <a href="https://github.com/dpleshakov/laser-top">GitHub</a>
+	<div id="content">
+		<div id="header">
+			<div id="header-main-page-return"><a href="/">&#8678;На главную</a></div>
+			<div id="header-center">Портал статистики игр &laquo;<a href="http://vk.com/lasertagfundays">Lasertag fun days</a>&raquo;</div>
+		</div>
+		<div id="main">
+			{% block main %}
+			{% endblock %}
+		</div>
+		<div id="footer">
+			<div id="links">
+				<a href="#">Справка</a>
+				&lrm;
+				<a href="#">Условия использования</a>
+				&lrm;
+				<a href="#">Информация о портале</a>
+				&lrm;
+				<a href="/admin">Администрирование</a>
+				&lrm;
+			</div>
+			<div id="about">
+				&copy; 2013 Pleshakov Dmitry <a href="mailto:dpleshakov@gmail.com">&lt;dpleshakov@gmail.com&gt;</a><br />
+				Source code on <a href="https://github.com/dpleshakov/laser-top">GitHub</a>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
