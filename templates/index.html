@@ -1,22 +1,15 @@
 {% extends "base.html" %}
 
 {% block head %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
-	function ChangeDisplay(element) {
-		if (element.style.display == "none") {
-			element.style.display = '';
-		}
-		else {
-			element.style.display = 'none';
-		}
-	}
-
-	onload = function() {
-		document.getElementById('gamersList').style.display = 'none';
-		// document.getElementById('commandsList').style.display = 'none';
-		// document.getElementById('gamesList').style.display = 'none';
-	}
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
 </script>
+
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type='text/javascript'>
 		google.load('visualization', '1', {packages:['table']});
@@ -48,44 +41,47 @@
 {% endblock %}
 
 {% block main %}
-<div id="lists">
-	<table>
-		<tr>
-			<td>
-				<div id="gamers">
-					Игроки <a href="#" onclick="ChangeDisplay(document.getElementById('gamersList')); return false;">(скрыть/показать)</a>:<br>
-					<ul id="gamersList">
-						{% for gamer in gamers %}
-						<li>{{ gamer|GamerFormat }} <a href="/gamer?key={{ gamer.keyStr }}">(профиль)</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-			</td>
-			<td>
-				<div id="commands">
-					Команды <a href="#" onclick="ChangeDisplay(document.getElementById('commandsList')); return false;">(скрыть/показать)</a>:
-					<ul id="commandsList">
-						{% for command in commands %}
-						<li><img src="/images/{{ command.logo.keyStr }}" />{{ command.name }} <a href="/command?key={{ command.keyStr }}">(профиль)</a> <a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-			</td>
-			<td>
-				<div id="games">
-					Игры <a href="#" onclick="ChangeDisplay(document.getElementById('gamesList')); return false;">(скрыть/показать)</a>:
-					<ul id="gamesList">
-						{% for game in games %}
-						<li>Игра {{ game.date|DateFormat }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
-<div id="stats">
-	Сводная статистика за все время <a href="#" onclick="ChangeDisplay(document.getElementById('stats-table-div')); return false;">(скрыть/показать)</a>:<br>
-	<div id="stats-table-div"></div>
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Новости</a></li>
+		<li><a href="#tabs-2">Список игр</a></li>
+		<li><a href="#tabs-3">Список игроков</a></li>
+		<li><a href="#tabs-4">Список команд</a></li>
+		<li><a href="#tabs-5">Статистика</a></li>
+	</ul>
+	<div id="tabs-1">
+		Будут новости.
+	</div>
+	<div id="tabs-2">
+		<ul id="gamesList">
+			{% for game in games %}
+			<li>Игра {{ game.date|DateFormat }} <a href="/game?key={{ game.keyStr }}">(статистика)</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="tabs-3">
+		<ul id="gamersList">
+			{% for gamer in gamers %}
+			<li>{{ gamer|GamerFormat }} <a href="/gamer?key={{ gamer.keyStr }}">(профиль)</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="tabs-4">
+		<ul id="commandsList">
+			{% for command in commands %}
+			<li>
+				<img src="/images/{{ command.logo.keyStr }}" />{{ command.name }} 
+				<a href="/command?key={{ command.keyStr }}">(профиль)</a> 
+				<a href="/editCommand?key={{ command.keyStr }}">(редактировать)</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="tabs-5">
+		<div id="stats">
+			Сводная статистика за все время:<br>
+			<div id="stats-table-div"></div>
+		</div>
+	</div>
 </div>
 {% endblock %}
